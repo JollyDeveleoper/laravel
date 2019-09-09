@@ -16,15 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function() {
     Route::get('schedule', 'ScheduleController@index');
-    Route::get('/', function () {
-        return view('welcome');
-    });
+
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 });
 
-Route::post('reposter', 'Bot\BotController@index');
-Route::get('reposter', 'Bot\BotController@index');
+Route::get('/', 'HomeController@welcome');
+Route::match(['GET','POST'],'reposter', 'Bot\BotController@index');
 
 Auth::routes();
-
