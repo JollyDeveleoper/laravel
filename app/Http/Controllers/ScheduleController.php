@@ -13,9 +13,9 @@ class ScheduleController extends Controller
     public function index($day = 'all')
     {
         $list = Schedule::getList($day);
-        return view($this->getView(), array(
+        return view($this->getView(), [
             'data' => $list
-        ));
+        ]);
     }
 
     private static function getView()
