@@ -11,14 +11,10 @@
 |
 */
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function() {
-    Route::get('/', 'ScheduleController@index')->name('schedule');
-    Route::get('/{day}', 'ScheduleController@index');
+Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function () {
 
     Route::post('/edit', 'ScheduleController@edit')->name('edit');
     Route::post('/save', 'ScheduleController@save')->name('save');
@@ -26,9 +22,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function() {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 });
+Route::group(['prefix' => 'schedule'], function () {
+    Route::get('/', 'ScheduleController@index')->name('schedule');
+    Route::get('/{day}', 'ScheduleController@index');
+});
+
 
 Route::get('/', 'HomeController@welcome');
-Route::match(['GET','POST'],'reposter', 'Bot\BotController@index');
+Route::match(['GET', 'POST'], 'reposter', 'Bot\BotController@index');
 
 Auth::routes([
     'register' => true, // Registration Routes...
