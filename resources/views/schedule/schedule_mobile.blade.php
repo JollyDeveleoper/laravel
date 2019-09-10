@@ -9,22 +9,29 @@
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                На неделю
+                Расписание
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item">На сегодня</a>
-                <a class="dropdown-item">На завтра</a>
-            @foreach($days as $item)
-                    <a class="dropdown-item" href="#{{$item}}">{{$item}}</a>
+                <a class="dropdown-item" href="{{ url('schedule/') }}">Неделя</a>
+                <a class="dropdown-item" href="{{ url('schedule/today') }}">Сегодня</a>
+                <a class="dropdown-item" href="{{ url('schedule/tomorrow') }}">Завтра</a>
+                <!--Дни недели с якорями-->
+                @foreach($days_list as $item)
+                    <a class="dropdown-item" href="{{ route('schedule') . '#' . $item }}">{{$item}}</a>
                 @endforeach
             </div>
         </div>
         <br>
         @foreach($data as $item) <!--Все дни-->
-
         @if(!$item) @break @endif
 
-        <h3 id="{{$days[$i]}}">{{$days[$i]}}</h3>
+        <!--Заголовок текущего дня-->
+        @if($current_title)
+            <h3 id="{{$days_list[$i]}}">{{ $current_title}}</h3>
+        @else
+            <h3 id="{{$days_list[$i]}}">{{ $days_list[$i]}}</h3>
+        @endif
+
         @foreach($item as $value) <!--Конкретный день-->
         <div class="card">
             <div class="card-body">

@@ -22,7 +22,7 @@
                 @endif
                 <tr>
                     <td rowspan="{{ count($item) + 1 }}" class="font-weight-bold day">
-                        <span>{{ $days[$i] }}</span>
+                        <span>{{ $days_list[$i] }}</span>
                     </td>
                 </tr>
                 @foreach($item as $value)

@@ -14,8 +14,9 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth'], function() {
-    Route::get('schedule', 'ScheduleController@index');
+Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function() {
+    Route::get('/', 'ScheduleController@index')->name('schedule');
+    Route::get('/{day}', 'ScheduleController@index');
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
