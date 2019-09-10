@@ -18,6 +18,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function() {
     Route::get('/', 'ScheduleController@index')->name('schedule');
     Route::get('/{day}', 'ScheduleController@index');
 
+    Route::post('/edit', 'ScheduleController@edit')->name('edit');
+    Route::post('/save', 'ScheduleController@save')->name('save');
+
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 });

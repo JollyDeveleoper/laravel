@@ -3,42 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Bot\BotController;
+use App\Http\Request\PostRequest;
+use App\Library\Utils\Utils;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
-
-    static function isMobile(Request $request) {
-        return strpos(strtolower($request->server('HTTP_USER_AGENT')), 'mobile');
-    }
-
-    public static function getData() {
-        $content = file_get_contents(storage_path('schedule/config.json'));
-        $data = json_decode($content, true);
-        return $data;
-    }
-
     /**
      * Если получаем ..schedule/today или ..schedule/tomorrow,
      * то выбираем из массива конкертный день и отдаем его во view,
      * то есть убираем все остальные дни кроме выбранного
      *
+     * @param PostRequest $request
      * @param string $day
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+
     public function index($day = 'all') {
+        if ($day !== 'all' && $day !== 'today' && $day !== 'tomorrow') {
+            return response('', 403);
+        }
         // Дни недели для списка
         $days_title = array('Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота');
 
         // Новый и исходный массивы для формирования массива для выдачи
-        $data = self::getData()['schedule'];
+        $data = Utils::getData()['schedule'];
         $new_data = [];
 
         // Выбираем нужный день
         $title = null;
 
         if ($day !== 'all') {
-            $new_day = self::getLoadedDay($day); // название нового дня
+            $new_day = Utils::getLoadedDay($day); // название нового дня
             $new_data[$new_day] = $data[$new_day]; // в новый массив вставляем значение из старого
 
             // Выбираем нужный заголовок/заголовки
@@ -54,21 +52,22 @@ class ScheduleController extends Controller
     }
 
     private static function getView() {
-        return self::isMobile(\request()) ? 'schedule/schedule_mobile' : 'schedule/schedule';
+        return Utils::isMobile(\request()) ? 'schedule/mobile/schedule' : 'schedule/schedule';
     }
 
-    /**
-     * Возвращает название дня в зависимости от входного параметра
-     *
-     * Вернет завтрашний день при tomorrow
-     * Вернет сегодняшний день при today
-     *
-     * @param $day
-     * @return string
-     */
-    private static function getLoadedDay($day) {
-        $day_on_weekly = array('today' => date('l'), 'tomorrow' => BotController::getCurrentDateWithOffset(strtotime('tomorrow')));
-        $day = strtolower($day_on_weekly[$day]);
-        return $day;
+    public function edit() {
+        $data = Utils::getData();
+        return view('schedule/mobile/schedule_edit', [
+            'data' =>$data
+        ]);
+    }
+
+    public function save(PostRequest $request) {
+        $data = $request->get('json', '');
+        if (!$data) {
+            return;
+        }
+        Storage::disk('schedule')->put('config.json', str_replace('\/', '|', $data));
+        return redirect(route('schedule'));
     }
 }
