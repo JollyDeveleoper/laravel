@@ -15,6 +15,10 @@ class ScheduleController extends Controller
         return self::$instance;
     }
 
+    function isMobile(Request $request) {
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $request->server('HTTP_USER_AGENT'));
+    }
+
     public function getData() {
         $content = file_get_contents(storage_path('schedule/config.json'));
         $data = json_decode($content, true);
@@ -23,9 +27,11 @@ class ScheduleController extends Controller
 
     public function index() {
         $days = array("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота");
-        return view('schedule/schedule', array(
+
+        return view($this->isMobile(\request()) ? 'schedule/schedule_mobile' : 'schedule/schedule', array(
             'data' => $this->getData()['schedule'],
             'days' => $days,
+            'day' => date('l')
         ));
     }
 }
