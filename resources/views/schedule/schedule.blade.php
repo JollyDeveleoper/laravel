@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <span class="title">Расписание</span>
-    <div class="table-responsive">
+    <div class="container">
+        <span class="title">Расписание</span>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -41,5 +40,4 @@
             </thead>
         </table>
     </div>
-</div>
 @endsection

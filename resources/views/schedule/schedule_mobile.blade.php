@@ -6,23 +6,18 @@
         @php
             $i = 0;
         @endphp
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Расписание
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{{ url('schedule/') }}">Неделя</a>
-                <a class="dropdown-item" href="{{ url('schedule/today') }}">Сегодня</a>
-                <a class="dropdown-item" href="{{ url('schedule/tomorrow') }}">Завтра</a>
-                <!--Дни недели с якорями-->
-                @foreach($days_list as $item)
-                    <a class="dropdown-item" href="{{ route('schedule') . '#' . $item }}">{{$item}}</a>
-                @endforeach
-            </div>
-        </div>
+        <select class="form-control" onChange="window.location.href=this.value">
+            <option value="{{ url('/') }}">На неделю</option>
+            <option value="{{ url('schedule/today') }}">На сегодня</option>
+            <option value="{{ url('schedule/tomorrow') }}">На завтра</option>
+
+            @foreach($days_list as $item)
+                <option value="{{ route('schedule') . '#' . $item }}">{{$item}}</option>
+            @endforeach
+        </select>
         <br>
         @foreach($data as $item) <!--Все дни-->
+
         @if(!$item) @break @endif
 
         <!--Заголовок текущего дня-->
