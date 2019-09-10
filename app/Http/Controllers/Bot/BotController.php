@@ -24,7 +24,7 @@ class BotController extends Controller
 
         $post_id = $request->input('object.id', ''); // id нового поста в группе
         $chat_id = $request->input('object.peer_id', ''); // id чата, в котором произошло событие
-        $payload = $request->input('object.payload', ''); // Юзер нажал кнопку на клавиатуре
+        $payload = (int) $request->input('object.payload', ''); // Юзер нажал кнопку на клавиатуре
         $text = $request->input('object.text', ''); // Юзер нажал кнопку на клавиатуре
 
         switch ($data['type']) {
