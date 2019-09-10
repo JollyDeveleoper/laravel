@@ -48,48 +48,25 @@ class BotController extends Controller
 
                 if (!$payload) break;
 
-                $this->parseCommands($payload);
+                VK_API::sendMessage($this->parseDays($payload));
                 break;
         }
         return response('ok');
     }
 
-    private function parseCommands($payload)
+    private function parseDays($payload)
     {
-        $day = '';
-        switch ($payload) {
-            case 1: // Вчера
-                $day = $this->getCurrentDateWithOffset(strtotime('yesterday'));
-                break;
-            case 2: // Завтра
-                $day = $this->getCurrentDateWithOffset(strtotime('tomorrow'));
-                break;
-            case 3: // Сегодня
-                $day = $this->getCurrentDateWithOffset(null);
-                break;
-            case 5: // Понедельник
-                $day = 'Monday';
-                break;
-            case 6: // Вторник
-                $day = 'Tuesday';
-                break;
-            case 7: // Среда
-                $day = 'Wednesday';
-                break;
-            case 8: // Четверг
-                $day = 'Thursday';
-                break;
-            case 9: // Пятница
-                $day = 'Friday';
-                break;
-            case 10: // Суббота
-                $day = 'Saturday';
-                break;
-            case 11: // Следующая пара
-                VK_API::sendMessage($this->getNextCouple());
-                return;
+        // Следующая пара
+        if ($payload === 10) {
+            return $this->getNextCouple();
         }
-        VK_API::sendMessage($this->getSchedule(mb_strtolower($day)));
+        $day = array(
+            $this->getCurrentDateWithOffset(strtotime('yesterday')),
+            $this->getCurrentDateWithOffset(strtotime('tomorrow')),
+            $this->getCurrentDateWithOffset(null),
+            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+        );
+        return $this->getSchedule(strtolower($day[$payload - 1]));
     }
 
     /**
@@ -154,8 +131,9 @@ class BotController extends Controller
      * @param int $offset
      * @return false|string
      */
-    static function getCurrentDateWithOffset($offset, $format = 'l')
+    static function getCurrentDateWithOffset($offset = null, $format = 'l')
     {
-        return date($format, $offset === null ? time() + 3600 : $offset);
+        date_default_timezone_set('Europe/Samara');
+        return date($format, $offset === null ? time() : $offset);
     }
 }

@@ -97,7 +97,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "5",
+          "payload": "4",
           "label": "Понедельник"
         },
         "color": "secondary"
@@ -105,7 +105,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "6",
+          "payload": "5",
           "label": "Вторник"
         },
         "color": "secondary"
@@ -115,7 +115,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "7",
+          "payload": "6",
           "label": "Среда"
         },
         "color": "secondary"
@@ -123,7 +123,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "8",
+          "payload": "7",
           "label": "Четверг"
         },
         "color": "secondary"
@@ -151,7 +151,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "11",
+          "payload": "10",
           "label": "Следующая пара"
         },
         "color": "secondary"
