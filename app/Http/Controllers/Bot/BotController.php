@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bot;
 
 use App\Http\Controllers\ScheduleController;
+use App\Library\Utils\Utils;
 use Illuminate\Http\Request;
 use App\Library\VK\VK_API;
 use App\Http\Controllers\Controller;
@@ -76,7 +77,7 @@ class BotController extends Controller
      */
     function getSchedule($day)
     {
-        $data = ScheduleController::getData();
+        $data = Utils::getData();
         $current_day = $data['schedule'][$day];
         if (!$current_day) {
             return ('Пар нет');
@@ -100,7 +101,7 @@ class BotController extends Controller
         $current_day = mb_strtolower($this->getCurrentDateWithOffset(null));
         $current_time = $this->getCurrentDateWithOffset(null, 'Hi');
 
-        $data = ScheduleController::getData();
+        $data = Utils::getData();
 
         // Получаем ищем по текущему дню
         $day = $data['schedule'][$current_day];
