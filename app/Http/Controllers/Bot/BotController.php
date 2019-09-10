@@ -53,6 +53,7 @@ class BotController extends Controller
                 }
 
                 VK_API::sendMessage($this->findScheduleOnDay($payload));
+//                echo $this->findScheduleOnDay($payload);
         }
         return response('ok');
     }
@@ -118,7 +119,6 @@ class BotController extends Controller
         $data = Schedule::nextCouple();
 
         if (!$data) return 'Следующая пара не найдена';
-        $data = $data[0];
 
         return $this->getText($data);
     }

@@ -45,7 +45,7 @@ class Schedule extends Model
 
     public function scopeSchedule($query, int $day): array
     {
-        $data = $this->getSchedules($day)->orderBy('day', 'ASC')->get()->toArray();
+        $data = $this->getSchedules($day)->sortBy('start_time')->toArray();
         return $data;
     }
 
@@ -53,11 +53,16 @@ class Schedule extends Model
     {
         $day = date('w');
         $current_time = date('H:i');
-        return $this->getSchedules($day)->whereTime('start_time', '>', $current_time)->orderBy('day', 'ASC')->get()->toArray();
+        $result = $this->getSchedules($day)->firstWhere('start_time', '>', $current_time);
+        $arr = [];
+        if ($result !== null) {
+            $arr = $result->toArray();
+        }
+        return $arr;
     }
 
     private function getSchedules(int $day)
     {
-        return self::where('day', $day);
+        return self::all()->where('day', $day);
     }
 }
