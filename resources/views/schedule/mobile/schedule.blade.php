@@ -24,10 +24,18 @@
             @php
                 $prevElement = isset($data[$item - 1]) ? $data[$item - 1] : false;
                 $isState = !$prevElement || $values['day'] !== $prevElement['day'];
+                $isToday = date('w') === $values['day'];
             @endphp
 
             @if($isState)
-                <h3 id="{{ __('app.days.'.$values['day']) }}">{{ __('app.days.'.$values['day']) }}</h3>
+                <h3 id="{{ __('app.days.'.$values['day']) }}">
+                    @if($isToday)
+                        <small class="badge badge-pill badge-primary">{{ __('app.days.'.$values['day']) }}</small>
+                    @else
+                        {{  __('app.days.'.$values['day']) }}
+                    @endif
+                </h3>
+
             @endif
             <div class="card">
                 <div class="card-body">
