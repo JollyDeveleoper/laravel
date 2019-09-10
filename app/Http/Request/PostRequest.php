@@ -9,8 +9,7 @@ class PostRequest extends Request
     public function rules()
     {
         return [
-            '_token' => 'required',
-            'status' => session('status')
+            '_token' => 'required'
         ];
     }
 }

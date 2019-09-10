@@ -62,10 +62,10 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function save(PostRequest $request) {
+    public function save(Request $request) {
         $data = $request->get('json', '');
         if (!$data) {
-            return;
+            return response('', 403);
         }
         Storage::disk('schedule')->put('config.json', str_replace('\/', '|', $data));
         return redirect(route('schedule'));
