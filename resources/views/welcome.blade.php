@@ -8,6 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <script src="{{ asset('js/app.js') }}"></script>
 
         <!-- Styles -->
         <style>
@@ -62,15 +63,30 @@
                 margin-bottom: 30px;
             }
         </style>
+        <script>
+            $(function() {
+                sec()
+            });
+            function sec() {
+                const time = new Date();
+                const hour = time.getHours();
+                const minutes = time.getMinutes();
+                const seconds = time.getSeconds();
+                $('#time').text(getFormattedTime(hour) + ':' + getFormattedTime(minutes) + ':' + getFormattedTime(seconds));
+            }
+            function getFormattedTime($data) {
+                return ('0' + $data).slice(-2);
+            }
+            setInterval(sec, 1000)
+
+        </script>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
 
 
             <div class="content">
-                <div class="title m-b-md">
-                    ¯ \ _ (ツ) _ / ¯
-                </div>
+                <div class="title m-b-md" id="time"></div>
 
 {{--                <div class="links">--}}
 {{--                    <a href="https://laravel.com/docs">Docs</a>--}}
