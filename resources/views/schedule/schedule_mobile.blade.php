@@ -6,8 +6,8 @@
         @php
             $i = 0;
         @endphp
-        <select class="form-control" onChange="window.location.href=this.value">
-            <option value="{{ url('/') }}">На неделю</option>
+        <select class="form-control" onchange="location = this.value; this.select">
+            <option value="{{ url('/schedule') }}">На неделю</option>
             <option value="{{ url('schedule/today') }}">На сегодня</option>
             <option value="{{ url('schedule/tomorrow') }}">На завтра</option>
 
@@ -21,11 +21,7 @@
         @if(!$item) @break @endif
 
         <!--Заголовок текущего дня-->
-        @if($current_title)
-            <h3 id="{{$days_list[$i]}}">{{ $current_title}}</h3>
-        @else
-            <h3 id="{{$days_list[$i]}}">{{ $days_list[$i]}}</h3>
-        @endif
+        <h3 id="{{ $days_list[$i] }}">{{ $current_title ?? $days_list[$i] }}</h3>
 
         @foreach($item as $value) <!--Конкретный день-->
         <div class="card">
