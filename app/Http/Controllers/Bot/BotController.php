@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Bot;
 
-use App\Http\Controllers\ScheduleController;
-use App\Library\Utils\Utils;
-use Illuminate\Http\Request;
-use App\Library\VK\VK_API;
 use App\Http\Controllers\Controller;
+use App\Http\Models\Schedule;
+use App\Library\VK\VK_API;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class BotController extends Controller
 {
@@ -25,7 +23,7 @@ class BotController extends Controller
 
         $post_id = $request->input('object.id', ''); // id нового поста в группе
         $chat_id = $request->input('object.peer_id', ''); // id чата, в котором произошло событие
-        $payload = (int) $request->input('object.payload', ''); // Юзер нажал кнопку на клавиатуре
+        $payload = (int)$request->input('object.payload', ''); // Юзер нажал кнопку на клавиатуре
         $text = $request->input('object.text', ''); // Юзер нажал кнопку на клавиатуре
 
         switch ($data['type']) {
@@ -49,25 +47,40 @@ class BotController extends Controller
 
                 if (!$payload) break;
 
-                VK_API::sendMessage($this->parseDays($payload));
+                // Передаем нажатую клавишу
+                if ($payload < 7) {
+                    VK_API::sendMessage($this->getSchedule($payload));
+                    break;
+                }
+
+                // Следующая пара
+                if ($payload === 10) {
+                    VK_API::sendMessage($this->getNextCouple());
+                    break;
+                }
+
+
+                $day = (int)$this->parseDays($payload); // выбранный день в виде строки
+                VK_API::sendMessage($this->getSchedule($day));
                 break;
         }
+        unset($data);
         return response('ok');
     }
 
-    private function parseDays($payload)
+    private static function parseDays($payload)
     {
-        // Следующая пара
-        if ($payload === 10) {
-            return $this->getNextCouple();
+        if ($payload === 9) {
+            return date('w');
         }
-        $day = array(
-            $this->getCurrentDateWithOffset(strtotime('yesterday')),
-            $this->getCurrentDateWithOffset(strtotime('tomorrow')),
-            $this->getCurrentDateWithOffset(null),
-            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-        );
-        return $this->getSchedule(strtolower($day[$payload - 1]));
+
+        if ($payload === 7) {
+            return date('w', strtotime('tomorrow'));
+        }
+
+        if ($payload === 8) {
+            return date('w', strtotime('yesterday'));
+        }
     }
 
     /**
@@ -77,15 +90,13 @@ class BotController extends Controller
      */
     function getSchedule($day)
     {
-        $data = Utils::getData();
-        $current_day = $data['schedule'][$day];
-        if (!$current_day) {
-            return ('Пар нет');
-        }
-        $text = '';
-        foreach ($current_day as $item) {
-            $time = $item['start_time'] . ' - ' . $item['end_time'] . "\n";
-            $name = $item['name'] . ' (' . $item['cabinet'] . 'каб.)';
+        $text = null;
+        foreach (Schedule::where('day', $day)->cursor() as $item) {
+            if (empty($item->name)) {
+                return 'Нет пар на этот день';
+            }
+            $time = $item->start_time . ' - ' . $item->end_time . "\n";
+            $name = $item->name . ' (' . $item->cabinet . 'каб.)';
             $text .= "$time $name \n\n";
         }
         return $text;
@@ -93,48 +104,31 @@ class BotController extends Controller
 
     /**
      * Получаем следующую пару относительно расписания
-     * Смещение на +1 от МСК хардкорим в коде
+     *
      * @return string
      */
     private function getNextCouple()
     {
-        $current_day = mb_strtolower($this->getCurrentDateWithOffset(null));
-        $current_time = $this->getCurrentDateWithOffset(null, 'Hi');
+        $data = Schedule::get(date('w'));
 
-        $data = Utils::getData();
-
-        // Получаем ищем по текущему дню
-        $day = $data['schedule'][$current_day];
-
-        if (!$day) {
+        if (empty($data[0]->name)) {
             return 'На сегодня пар нет';
         }
 
         $text = 'Следующая пара не найдена. Видимо, на сегодня все!';
-        foreach ($day as $item) {
+        $current_time = date('Hi');
+
+        foreach ($data as $item) {
             $time = strtr($item['start_time'], array(':' => ''));
             if ($time > $current_time) {
                 $time = $item['start_time'] . ' - ' . $item['end_time'] . "\n";
                 $name = $item['name'] . ' (' . $item['cabinet'] . 'каб.)';
                 $text = "$time $name";
+                unset($data);
                 // Важно поставить break, т.к дальше могут быть еше пары и данные перезапишутся
                 break;
             }
         }
         return $text;
-    }
-
-    /**
-     * Получаем текущее время с дефолтным оффсетом на 1 час от МСК
-     *
-     * Смещение по оффсету идет относительно времени по мск
-     * @param $format
-     * @param int $offset
-     * @return false|string
-     */
-    static function getCurrentDateWithOffset($offset = null, $format = 'l')
-    {
-        date_default_timezone_set('Europe/Samara');
-        return date($format, $offset === null ? time() : $offset);
     }
 }

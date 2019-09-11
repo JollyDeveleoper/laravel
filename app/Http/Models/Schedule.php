@@ -25,6 +25,16 @@ class Schedule extends Model
         return $data;
     }
 
+    /**
+     * Получаем все пары на определенный день
+     *
+     * @param int $day
+     * @return Schedule[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public static function get(int $day) {
+        return self::where('day', $day)->get();
+    }
+
     private static function getDay($day) {
         $day_on_weekly = array('today' => getdate(), 'tomorrow' => getdate(strtotime('tomorrow')));
         return $day_on_weekly[$day]['wday'];

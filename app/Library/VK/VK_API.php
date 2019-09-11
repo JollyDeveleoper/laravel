@@ -67,37 +67,12 @@ class VK_API
         return '{
   "one_time": false,
   "buttons": [
+    
     [
       {
         "action": {
           "type": "text",
           "payload": "1",
-          "label": "Вчера"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "2",
-          "label": "Завтра"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "3",
-          "label": "Сегодня"
-        },
-        "color": "secondary"
-      }
-    ],
-    [
-      {
-        "action": {
-          "type": "text",
-          "payload": "4",
           "label": "Понедельник"
         },
         "color": "secondary"
@@ -105,7 +80,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "5",
+          "payload": "2",
           "label": "Вторник"
         },
         "color": "secondary"
@@ -115,7 +90,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "6",
+          "payload": "3",
           "label": "Среда"
         },
         "color": "secondary"
@@ -123,7 +98,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "7",
+          "payload": "4",
           "label": "Четверг"
         },
         "color": "secondary"
@@ -133,7 +108,7 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "8",
+          "payload": "5",
           "label": "Пятница"
         },
         "color": "secondary"
@@ -141,8 +116,34 @@ class VK_API
       {
         "action": {
           "type": "text",
-          "payload": "9",
+          "payload": "6",
           "label": "Суббота"
+        },
+        "color": "secondary"
+      }
+    ],
+    [
+      {
+        "action": {
+          "type": "text",
+          "payload": "7",
+          "label": "Вчера"
+        },
+        "color": "secondary"
+      },
+      {
+        "action": {
+          "type": "text",
+          "payload": "8",
+          "label": "Завтра"
+        },
+        "color": "secondary"
+      },
+      {
+        "action": {
+          "type": "text",
+          "payload": "9",
+          "label": "Сегодня"
         },
         "color": "secondary"
       }
