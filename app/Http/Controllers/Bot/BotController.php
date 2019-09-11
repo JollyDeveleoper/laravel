@@ -29,15 +29,15 @@ class BotController extends Controller
         $text = $request->input('object.text', ''); // Юзер нажал кнопку на клавиатуре
 
         switch ($data['type']) {
-            case env('VK_EVENT_CONFIRMATION'):
+            case config('api.VK_EVENT_CONFIRMATION'):
                 return response('123');
 
-            case env('VK_EVENT_WALL_POST_NEW'):
+            case config('api.VK_EVENT_WALL_POST_NEW'):
                 VK_API::repost($post_id);
                 break;
-            case env('VK_EVENT_MESSAGE_NEW'):
+            case config('api.VK_EVENT_MESSAGE_NEW'):
 
-                if ($chat_id === env('VK_CHAT_ID')) {
+                if ($chat_id === config('api.VK_CHAT_ID')) {
                     break;
                 }
 

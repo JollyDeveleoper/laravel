@@ -18,8 +18,8 @@ class VK_API
 
     public static function request($params, $method)
     {
-        $params['v'] = env('VK_API_VERSION');
-        $params['access_token'] = env('VK_API_TOKEN');
+        $params['v'] = config('api.VK_API_VERSION');
+        $params['access_token'] = config('api.VK_API_TOKEN');
         $promise = self::getGuzzleClient()->requestAsync(
             'POST',
             'https://api.vk.com/method/' . $method,
@@ -33,8 +33,8 @@ class VK_API
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => env('VK_CHAT_ID'),
-            'attachment' => 'wall' . env('VK_DPK_ID') . '_' . $post_id,
+            'peer_id' => config('api.VK_CHAT_ID'),
+            'attachment' => 'wall' . config('api.VK_DPK_ID') . '_' . $post_id,
         );
         self::request($request_params, $method);
     }
@@ -44,7 +44,7 @@ class VK_API
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => env('VK_TEST_CHAT_ID'),
+            'peer_id' => config('api.VK_TEST_CHAT_ID'),
             'message' => $message,
         );
         self::request($request_params, $method);
@@ -55,7 +55,7 @@ class VK_API
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => env('VK_TEST_CHAT_ID'),
+            'peer_id' => config('api.VK_TEST_CHAT_ID'),
             'message' => $message,
             'keyboard' => self::getKeyboard()
         );
