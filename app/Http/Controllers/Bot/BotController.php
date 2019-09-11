@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Validator;
 
 class BotController extends Controller
 {
+    public function __construct()
+    {
+        date_default_timezone_set('Europe/Samara');
+    }
+
     public function index(Request $request)
     {
         $data = $request->all();
