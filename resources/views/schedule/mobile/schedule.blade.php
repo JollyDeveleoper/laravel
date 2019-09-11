@@ -2,17 +2,14 @@
 
 @section('content')
     <div class="container">
-        @php
-            $i = 0;
-        @endphp
         <select class="form-control" onchange="this.value !== '' ? location = this.value : ''; this.select">
             <option value="">Выберите</option>
             <option value="{{ url('schedule/') }}">На неделю</option>
             <option value="{{ url('schedule/today') }}">На сегодня</option>
             <option value="{{ url('schedule/tomorrow') }}">На завтра</option>
 
-            @foreach($days_list as $item)
-                <option value="{{ url('schedule') . '#' . $item }}">{{$item}}</option>
+            @foreach($data as $item => $key)
+                <option value="{{ url('schedule') . '#' . __('app.'.$item) }}">{{__('app.'.$item)}}</option>
             @endforeach
         </select>
         <br>
@@ -26,20 +23,19 @@
             @endif
         </form>
 
-        @foreach($data as $item) <!--Все дни-->
+        <!--Все дни-->
+        @foreach($data as $item => $key)
+        @if(!$key) @break @endif
 
-        @if(!$item) @break @endif
+        <!--Заголовок текущего дня берем из локали-->
+        <h3 id="{{ __('app.'.$item) }}">{{ __('app.'.$item) }}</h3>
 
-        <!--Заголовок текущего дня-->
-        <h3 id="{{ $days_list[$i] }}">{{ $current_title ?? $days_list[$i] }}</h3>
-
-        @foreach($item as $value) <!--Конкретный день-->
-
+        <!--Конкретный день-->
+        @foreach($key as $value)
 
         <div class="card">
             <div class="card-body">
-                <h5 name="suka" value="{{$value['name']}}"
-                    class="card-title">{{ $value['start_time'] . ' - ' . $value['end_time'] }}</h5>
+                <h5 class="card-title">{{ $value['start_time'] . ' - ' . $value['end_time'] }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ $value['teacher'] }}</h6>
                 <p class="card-text">{{ $value['name'] . " (" . $value['cabinet'] . ")"}} </p>
 
@@ -48,11 +44,6 @@
         <br>
 
         @endforeach
-
-
-        @php
-            $i++;
-        @endphp
         @endforeach
 
     </div>
