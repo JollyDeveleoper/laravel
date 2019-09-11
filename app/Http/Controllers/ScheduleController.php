@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ScheduleController extends Controller
 {
+
     public function index($day = 'all')
     {
-        $schedule = new Schedule();
+        $list = Schedule::getList($day);
         return view($this->getView(), array(
-            'data' => $schedule->getList($day)
+            'data' => $list
         ));
     }
 

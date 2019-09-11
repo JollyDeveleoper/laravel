@@ -18,14 +18,14 @@ class Utils {
      * @return string
      */
     public static function getLoadedDay($day) {
-        $day_on_weekly = array('today' => date('l'), 'tomorrow' => BotController::getCurrentDateWithOffset(strtotime('tomorrow')));
+
+        $day_on_weekly = array('today' => getdate()['wday'], 'tomorrow' => getdate(strtotime('tomorrow'))['wday']);
         // Тут какой-то пиздец. Закрываем доступ
         if (!isset($day_on_weekly[$day])) {
             return strtolower($day_on_weekly['today']);
         }
         $result = $day_on_weekly[$day];
-        $day = strtolower($result);
-        return $day;
+        return $result;
     }
 
     /**

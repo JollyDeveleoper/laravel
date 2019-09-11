@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
+    protected $table = 'schedules';
 
     /**
      * Если получаем ..schedule/today или ..schedule/tomorrow,
@@ -16,19 +17,16 @@ class Schedule extends Model
      * @param string $day
      * @return array
      */
-    public function getList($day) {
-        // Новый и исходный массивы для формирования массива для выдачи
-        $data = Utils::getData()['schedule'];
-        $new_data = [];
-
+    public static function getList($day) {
+        $data = self::all();
         if ($day !== 'all') {
-            $new_day = Utils::getLoadedDay($day); // название нового дня
-            $new_data[$new_day] = $data[$new_day]; // в новый массив вставляем значение из старого
-
-            unset($data);
-            return $new_data;
+            $data = $data->where('day', self::getDay($day));
         }
-
         return $data;
+    }
+
+    private static function getDay($day) {
+        $day_on_weekly = array('today' => getdate(), 'tomorrow' => getdate(strtotime('tomorrow')));
+        return $day_on_weekly[$day]['wday'];
     }
 }

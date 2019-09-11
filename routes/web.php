@@ -30,4 +30,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function() {
 Route::get('/', 'HomeController@welcome');
 Route::match(['GET','POST'],'reposter', 'Bot\BotController@index');
 
-Auth::routes();
+Auth::routes([
+    'register' => true, // Registration Routes...
+    'reset' => true, // Password Reset Routes...
+    'verify' => true, // Email Verification Routes...
+]);

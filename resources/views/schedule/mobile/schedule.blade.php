@@ -7,43 +7,38 @@
             <option value="{{ url('schedule/') }}">На неделю</option>
             <option value="{{ url('schedule/today') }}">На сегодня</option>
             <option value="{{ url('schedule/tomorrow') }}">На завтра</option>
-
-            @foreach($data as $item => $key)
-                <option value="{{ url('schedule') . '#' . __('app.'.$item) }}">{{__('app.'.$item)}}</option>
+            @foreach($data as $item => $value)
+                @if(7 > $value['id'])
+                    <option
+                        value="{{ url('schedule') . '#' . __('app.days.'.$value['id']) }}">{{ __('app.days.'.$value['id']) }}</option>
+                @endif
             @endforeach
         </select>
         <br>
-        <form action="{{ route('edit') }}" method="post">
-            @csrf
-            @if(Auth::user()->status === 1)
-                <button type="submit" class="btn btn-success btn-block">
-                    Редактировать
-                </button>
-                <br>
+
+        @foreach($data as $item => $values)
+            <!--
+                Тут какая-то дичь. Нужно для того, чтобы вывести заголовки без повтора.
+                НЕ ТРОГАТЬ!!!
+            -->
+            @php
+                $prevElement = isset($data[$item - 1]) ? $data[$item - 1] : false;
+                $isState = !$prevElement || $values['day'] !== $prevElement['day'];
+            @endphp
+
+            @if($isState)
+                <h3 id="{{ __('app.days.'.$values['day']) }}">{{ __('app.days.'.$values['day']) }}</h3>
             @endif
-        </form>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $values['start_time'] . ' - ' . $values['end_time'] }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ $values['teacher'] }}</h6>
+                    <p class="card-text">{{ $values['name'] . " (" . $values['cabinet'] . ")"}} </p>
 
-        <!--Все дни-->
-        @foreach($data as $item => $key)
-        @if(!$key) @break @endif
-
-        <!--Заголовок текущего дня берем из локали-->
-        <h3 id="{{ __('app.'.$item) }}">{{ __('app.'.$item) }}</h3>
-
-        <!--Конкретный день-->
-        @foreach($key as $value)
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ $value['start_time'] . ' - ' . $value['end_time'] }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ $value['teacher'] }}</h6>
-                <p class="card-text">{{ $value['name'] . " (" . $value['cabinet'] . ")"}} </p>
-
+                </div>
             </div>
-        </div>
-        <br>
+            <br>
 
-        @endforeach
         @endforeach
 
     </div>
