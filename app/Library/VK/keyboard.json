@@ -63,7 +63,9 @@
                     "label": "Завтра"
                 },
                 "color": "secondary"
-            },
+            }
+        ],
+        [
             {
                 "action": {
                     "type": "text",
