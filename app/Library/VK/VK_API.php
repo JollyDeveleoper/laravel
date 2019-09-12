@@ -2,30 +2,15 @@
 
 namespace App\Library\VK;
 
-use GuzzleHttp\Client;
-
 class VK_API
 {
-    static $client = null;
-
-    private static function getGuzzleClient()
-    {
-        if (self::$client === null) {
-            self::$client = new Client();
-        }
-        return self::$client;
-    }
 
     public static function request($params, $method)
     {
         $params['v'] = config('api.VK_API_VERSION');
         $params['access_token'] = config('api.VK_API_TOKEN');
-        $promise = self::getGuzzleClient()->requestAsync(
-            'POST',
-            'https://api.vk.com/method/' . $method,
-            ["form_params" => $params]
-        );
-        return $promise->wait();
+        $params = http_build_query($params);
+        file_get_contents('https://api.vk.com/method/' . $method . '?' . $params);
     }
 
     public static function repost($post_id)
@@ -50,7 +35,7 @@ class VK_API
         self::request($request_params, $method);
     }
 
-    public static function sendMessageWithKeyboard($message)
+    public static function updateKeyboard($message = 'Клавиатура обновлена!')
     {
         $method = 'messages.send';
         $request_params = array(
@@ -64,101 +49,6 @@ class VK_API
 
     public static function getKeyboard()
     {
-        return '{
-  "one_time": false,
-  "buttons": [
-    
-    [
-      {
-        "action": {
-          "type": "text",
-          "payload": "1",
-          "label": "Понедельник"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "2",
-          "label": "Вторник"
-        },
-        "color": "secondary"
-      }
-    ],
-    [
-      {
-        "action": {
-          "type": "text",
-          "payload": "3",
-          "label": "Среда"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "4",
-          "label": "Четверг"
-        },
-        "color": "secondary"
-      }
-    ],
-    [
-      {
-        "action": {
-          "type": "text",
-          "payload": "5",
-          "label": "Пятница"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "6",
-          "label": "Суббота"
-        },
-        "color": "secondary"
-      }
-    ],
-    [
-      {
-        "action": {
-          "type": "text",
-          "payload": "7",
-          "label": "Вчера"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "8",
-          "label": "Завтра"
-        },
-        "color": "secondary"
-      },
-      {
-        "action": {
-          "type": "text",
-          "payload": "9",
-          "label": "Сегодня"
-        },
-        "color": "secondary"
-      }
-    ],
-    [
-      {
-        "action": {
-          "type": "text",
-          "payload": "10",
-          "label": "Следующая пара"
-        },
-        "color": "secondary"
-      }
-    ]
-  ]
-}';
+        return file_get_contents(app_path('Library/VK/keyboard.json'));
     }
 }

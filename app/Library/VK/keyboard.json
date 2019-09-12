@@ -1,0 +1,87 @@
+{
+    "one_time": false,
+    "buttons": [
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "1",
+                    "label": "Понедельник"
+                },
+                "color": "secondary"
+            },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "2",
+                    "label": "Вторник"
+                },
+                "color": "secondary"
+            }
+        ],
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "3",
+                    "label": "Среда"
+                },
+                "color": "secondary"
+            },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "4",
+                    "label": "Четверг"
+                },
+                "color": "secondary"
+            }
+        ],
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "5",
+                    "label": "Пятница"
+                },
+                "color": "secondary"
+            },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "6",
+                    "label": "Суббота"
+                },
+                "color": "secondary"
+            }
+        ],
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "8",
+                    "label": "Завтра"
+                },
+                "color": "secondary"
+            },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "9",
+                    "label": "Сегодня"
+                },
+                "color": "secondary"
+            }
+        ],
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "10",
+                    "label": "Следующая пара"
+                },
+                "color": "secondary"
+            }
+        ]
+    ]
+}
