@@ -97,7 +97,7 @@ class BotController extends Controller
      */
     private static function parseDays($payload)
     {
-        $day = date('w', strtotime($payload === 7 ? 'tomorrow' : 'today'));
+        $day = date('w', strtotime($payload === 8 ? 'tomorrow' : 'today'));
         return $day;
     }
 
