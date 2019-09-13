@@ -16,38 +16,41 @@
         </select>
         <br>
 
+    @if($data)
         @foreach($data as $item => $values)
             <!--
                 Тут какая-то дичь. Нужно для того, чтобы вывести заголовки без повтора.
                 НЕ ТРОГАТЬ!!!
             -->
-            @php
-                $prevElement = isset($data[$item - 1]) ? $data[$item - 1] : false;
-                $isState = !$prevElement || $values['day'] !== $prevElement['day'];
-                $isToday = date('w') === $values['day'];
-            @endphp
+                @php
+                    $prevElement = isset($data[$item - 1]) ? $data[$item - 1] : false;
+                    $isState = !$prevElement || $values['day'] !== $prevElement['day'];
+                    $isToday = date('w') === $values['day'];
+                @endphp
 
-            @if($isState)
-                <h3 id="{{ __('app.days.'.$values['day']) }}">
-                    @if($isToday)
-                        <small class="badge badge-pill badge-primary">{{ __('app.days.'.$values['day']) }}</small>
-                    @else
-                        {{  __('app.days.'.$values['day']) }}
-                    @endif
-                </h3>
+                @if($isState)
+                    <h3 id="{{ __('app.days.'.$values['day']) }}">
+                        @if($isToday)
+                            <small class="badge badge-pill badge-primary">{{ __('app.days.'.$values['day']) }}</small>
+                        @else
+                            {{  __('app.days.'.$values['day']) }}
+                        @endif
+                    </h3>
 
-            @endif
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $values['start_time'] . ' - ' . $values['end_time'] }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ $values['teacher'] }}</h6>
-                    <p class="card-text">{{ $values['name'] . " (" . $values['cabinet'] . ")"}} </p>
+                @endif
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $values['start_time'] . ' - ' . $values['end_time'] }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ $values['teacher'] }}</h6>
+                        <p class="card-text">{{ $values['name'] . " (" . $values['cabinet'] . ")"}} </p>
 
+                    </div>
                 </div>
-            </div>
-            <br>
+                <br>
 
-        @endforeach
-
+            @endforeach
+        @else
+        <div class="text-center font-weight-bold">Нет пар на этот день <br>¯\_(ツ)_/¯</div>
+        @endif
     </div>
 @endsection
