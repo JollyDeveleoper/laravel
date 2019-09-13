@@ -63,10 +63,8 @@ class BotController extends Controller
      * @param $day
      * @return int|string|null
      */
-    private function findScheduleOnDay($day)
+    private function findScheduleOnDay(int $day): string
     {
-        $schedule = null;
-
         // Следующая пара
         if ($day === self::NEXT_COUPLE) {
             return $this->getNextCouple();
@@ -83,19 +81,18 @@ class BotController extends Controller
      * @param $text
      * @return bool
      */
-    private static function isUpdateKeyboard($text)
+    private static function isUpdateKeyboard(string $text): bool
     {
         return $text === 'update';
     }
 
     /**
      * Получение дня в неделе относительно запроса
-     * Возвращает int
      *
-     * @param $payload
-     * @return false|string
+     * @param int $payload
+     * @return int
      */
-    private static function parseDays($payload)
+    private static function parseDays(int $payload): int
     {
         $day = date('w', strtotime($payload === 8 ? 'tomorrow' : 'today'));
         return $day;
@@ -108,7 +105,7 @@ class BotController extends Controller
      * @param $day
      * @return string
      */
-    function getSchedule($day)
+    function getSchedule(int $day): string
     {
         $data = Schedule::schedule($day);
 
@@ -131,11 +128,9 @@ class BotController extends Controller
      *
      * @return string
      */
-    private function getNextCouple()
+    private function getNextCouple() : string
     {
-        $day = date('w');
-
-        $data = Schedule::schedule($day, true);
+        $data = Schedule::nextCouple();
 
         if (!$data) return 'Следующая пара не найдена';
         $data = $data[0];

@@ -17,7 +17,8 @@ class Schedule extends Model
      * @param string $day
      * @return array
      */
-    public static function getList($day) {
+    public static function getList($day)
+    {
         $data = self::all();
         if ($day !== 'all') {
             $data = $data->where('day', self::getDay($day));
@@ -31,25 +32,32 @@ class Schedule extends Model
      * @param int $day
      * @return Schedule[]|\Illuminate\Database\Eloquent\Collection
      */
-    public static function get(int $day) {
+    public static function get(int $day)
+    {
         return self::where('day', $day)->get();
     }
 
-    private static function getDay($day) {
+    private static function getDay(string $day)
+    {
         $day_on_weekly = array('today' => getdate(), 'tomorrow' => getdate(strtotime('tomorrow')));
         return $day_on_weekly[$day]['wday'];
     }
 
-    public function scopeSchedule($query, $day, $nextCouple = false) {
-        $data = $this->getSchedules($day);
-        if ($nextCouple) {
-            $current_time = date('H:i');
-            $data->whereTime('start_time', '>', $current_time)->get()->toArray();
-        }
-        return $data->get()->toArray();
+    public function scopeSchedule(int $day): array
+    {
+        $data = $this->getSchedules($day)->get()->toArray();
+        return $data;
     }
 
-    private function getSchedules($day) {
+    public function scopeNextCouple(): array
+    {
+        $day = date('w');
+        $current_time = date('H:i');
+        return $this->getSchedules($day)->whereTime('start_time', '>', $current_time)->get()->toArray();
+    }
+
+    private function getSchedules(int $day)
+    {
         return self::where('day', $day);
     }
 }
