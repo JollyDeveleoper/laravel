@@ -41,7 +41,7 @@ class BotController extends Controller
                 $chat_id = $object['peer_id']; // id чата, в котором произошло событие
                 $text = $object['text']; // Юзер нажал кнопку на клавиатуре
 
-                $isUpdate = self::isUpdateKeyboard($text);
+                $isUpdate = $text === 'update';
                 if ($chat_id === config('api.VK_CHAT_ID') || !$payload && !$isUpdate) {
                     break;
                 }
@@ -75,18 +75,6 @@ class BotController extends Controller
     }
 
     /**
-     * Обновляем ли клавиатуру по запросу
-     * Возвращает boolean
-     *
-     * @param $text
-     * @return bool
-     */
-    private static function isUpdateKeyboard(string $text): bool
-    {
-        return $text === 'update';
-    }
-
-    /**
      * Получение дня в неделе относительно запроса
      *
      * @param int $payload
@@ -99,7 +87,6 @@ class BotController extends Controller
     }
 
     /**
-     * Достаем расписание пар и отправляем в чат
      * Возвращает все пары текстом на определенный день
      *
      * @param $day
@@ -107,18 +94,16 @@ class BotController extends Controller
      */
     function getSchedule(int $day): string
     {
+
         $data = Schedule::schedule($day);
 
         if (!$data) return 'Пары не найдены';
 
         $text = null;
-        $count_couple = count($data);
-        for ($i = 0; $i < $count_couple; ++$i) {
-            $item = $data[$i];
-            $time = $item['start_time'] . ' - ' . $item['end_time'] . "\n";
-            $name = $item['name'] . ' (' . $item['cabinet'] . 'каб.)';
-            $text .= "$time $name \n\n";
+        foreach ($data as $item) {
+            $text .= $this->getText($item);
         }
+
         return $text;
     }
 
@@ -128,17 +113,27 @@ class BotController extends Controller
      *
      * @return string
      */
-    private function getNextCouple() : string
+    private function getNextCouple(): string
     {
         $data = Schedule::nextCouple();
 
         if (!$data) return 'Следующая пара не найдена';
         $data = $data[0];
 
+        return $this->getText($data);
+    }
+
+    /**
+     * Формируем текст расписания с переданного массива
+     *
+     * @param array $data
+     * @return string
+     */
+    private function getText(array $data): string
+    {
         $time = $data['start_time'] . ' - ' . $data['end_time'] . "\n";
         $name = $data['name'] . ' (' . $data['cabinet'] . 'каб.)';
-        $text = "$time $name";
-
+        $text = "$time $name \n\n";
         return $text;
     }
 }
