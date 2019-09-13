@@ -2,7 +2,6 @@
 
 namespace App\Http\Models;
 
-use App\Library\Utils\Utils;
 use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
@@ -43,7 +42,7 @@ class Schedule extends Model
         return $day_on_weekly[$day]['wday'];
     }
 
-    public function scopeSchedule(int $day): array
+    public function scopeSchedule($query, int $day): array
     {
         $data = $this->getSchedules($day)->get()->toArray();
         return $data;
