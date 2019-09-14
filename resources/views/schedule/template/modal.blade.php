@@ -13,25 +13,25 @@
 
                 <div class="modal-body">
                     <label for="recipient-name" class="col-form-label">Название</label>
-                    <input required type="text" class="form-control" name="name"
+                    <input required class="form-control" name="name"
                            value="{{ $val['name'] }}">
                     <label for="recipient-name" class="col-form-label">Препод</label>
-                    <input required type="text" class="form-control" name="teacher"
+                    <input required class="form-control" name="teacher"
                            value="{{ $val['teacher'] }}">
                     <label for="recipient-name" class="col-form-label">Кабинет</label>
-                    <input required type="number" class="form-control" name="cabinet"
-                           maxlength="3"
+                    <input required class="form-control" name="cabinet"
+                           maxlength="9"
                            value="{{ $val['cabinet'] }}">
                     <div class="row">
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Начало</label>
-                            <input required type="text" name="start_time" class="form-control"
+                            <input required name="start_time" class="form-control"
                                    maxlength="5"
                                    value="{{ $val['start_time'] }}">
                         </div>
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Конец</label>
-                            <input required type="text" name="end_time" class="form-control"
+                            <input required name="end_time" class="form-control"
                                    maxlength="5"
                                    value="{{ $val['end_time'] }}">
                         </div>

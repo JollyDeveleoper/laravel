@@ -12,15 +12,20 @@ class ScheduleController extends Controller
     public function index($day = 'all')
     {
         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        $sortBy = "start_time";
         $list = Schedule::getList($day);
+        usort($list, function($l, $r) use ($sortBy){
+            return strcmp($l[$sortBy], $r[$sortBy]);
+        });
+
         $new_list = [];
         foreach ($list as $item => $value) {
             if ($list[$item]['day'] === next($list[$item])) {
                 krsort($list[$item]);
+
                 $new_list[$days[$value['day'] - 1]][] = $list[$item];
             }
         }
-
 
         return view($this->getView(), [
             'data' => $new_list
