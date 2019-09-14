@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Models\Schedule;
 use App\Library\Utils\Utils;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Cast\Object_;
+use PhpParser\Node\Scalar\String_;
 
 class ScheduleController extends Controller
 {
@@ -23,18 +25,41 @@ class ScheduleController extends Controller
         return Utils::isMobile(\request()) ? 'schedule/mobile/schedule' : 'schedule/schedule';
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
-        $data = Utils::getData();
-        return view('schedule/mobile/schedule_edit', [
-            'data' => $data
-        ]);
+        $data = $request->all();
+        $item = Schedule::find($data['id']);
+
+        $item->name = $data['name'];
+        $item->teacher = $data['teacher'];
+        $item->start_time = $data['start_time'];
+        $item->end_time = $data['end_time'];
+        $item->cabinet = $data['cabinet'];
+
+        $item->save();
+        return back();
     }
 
-    public function save(Request $request)
+    public function add(Request $request)
     {
-        $data = str_replace('\/', '|', $request->get('json', ''));
-        Storage::disk('schedule')->put('config.json', $data);
-        return redirect(route('schedule'));
+        $data = $request->all();
+
+        $item = new Schedule();
+        $item->day = $data['day'];
+        $item->name = $data['name'];
+        $item->teacher = $data['teacher'];
+        $item->start_time = $data['start_time'];
+        $item->end_time = $data['end_time'];
+        $item->cabinet = $data['cabinet'];
+
+        $item->save();
+        return back();
+
+    }
+
+    public function delete(Request $request) {
+        $deleteID = $request->all()['deleteID'];
+        Schedule::destroy($deleteID);
+        return back();
     }
 }

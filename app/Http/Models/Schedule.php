@@ -22,7 +22,7 @@ class Schedule extends Model
         if ($day !== 'all') {
             $data = $data->where('day', self::getDay($day));
         }
-        return $data->toArray();
+        return $data->sortBy('day')->toArray();
     }
 
     /**
@@ -44,7 +44,7 @@ class Schedule extends Model
 
     public function scopeSchedule($query, int $day): array
     {
-        $data = $this->getSchedules($day)->get()->toArray();
+        $data = $this->getSchedules($day)->orderBy('day', 'ASC')->get()->toArray();
         return $data;
     }
 
@@ -52,7 +52,7 @@ class Schedule extends Model
     {
         $day = date('w');
         $current_time = date('H:i');
-        return $this->getSchedules($day)->whereTime('start_time', '>', $current_time)->get()->toArray();
+        return $this->getSchedules($day)->whereTime('start_time', '>', $current_time)->orderBy('day', 'ASC')->get()->toArray();
     }
 
     private function getSchedules(int $day)

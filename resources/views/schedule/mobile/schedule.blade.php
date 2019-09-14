@@ -26,6 +26,7 @@
                     $prevElement = isset($data[$item - 1]) ? $data[$item - 1] : false;
                     $isState = !$prevElement || $values['day'] !== $prevElement['day'];
                     $isToday = date('w') === $values['day'];
+                    $modalId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7); // Уникальный id для модалки
                 @endphp
 
                 @if($isState)
@@ -36,6 +37,10 @@
                             {{  __('app.days.'.$values['day']) }}
                         @endif
                     </h3>
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addModal">
+                        Добавить
+                    </button><br>
+                    @include('schedule.template.modal_add')
 
                 @endif
                 <div class="card">
@@ -44,13 +49,30 @@
                         <h6 class="card-subtitle mb-2 text-muted">{{ $values['teacher'] }}</h6>
                         <p class="card-text">{{ $values['name'] . " (" . $values['cabinet'] . ")"}} </p>
 
+                        <!-- Modal -->
+                        @include('schedule.template.modal')
+
+                        <form action="{{ route('delete') }}" method="post">
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#{{$modalId}}">
+                            Редактировать
+                        </button>
+                            @csrf
+                            <button type="submit" class="btn btn-danger" value="{{ $values['id'] }}"
+                                    name="deleteID">
+                                Удалить
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <br>
 
+
+
             @endforeach
         @else
-        <div class="text-center font-weight-bold">Нет пар на этот день <br>¯\_(ツ)_/¯</div>
+            <div class="text-center font-weight-bold">Нет пар на этот день <br>¯\_(ツ)_/¯</div>
         @endif
     </div>
 @endsection
