@@ -22,19 +22,22 @@
         @if($data)
             @foreach($data as $item => $values)
 
-                <h3>
+                <h3 id="{{  __('app.days.'.$values[0]['day']) }}">
                     {{  __('app.days.'.$values[0]['day']) }}
                 </h3>
-                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addModal">
-                    Добавить
-                </button><br>
+                @if(Auth::check())
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addModal">
+                        Добавить
+                    </button><br>
+                @endif
                 @foreach($values as $val)
                     @php
                         $isToday = date('w') === $val['day'];
                         $modalId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7); // Уникальный id для модалки
                     @endphp
-                    @include('schedule.template.modal_add')
-
+                    @if(Auth::check())
+                        @include('schedule.template.modal_add')
+                    @endif
 
                     <div class="card">
                         <div class="card-body">
@@ -42,28 +45,27 @@
                             <h6 class="card-subtitle mb-2 text-muted">{{ $val['teacher'] }}</h6>
                             <p class="card-text">{{ $val['name'] . " (" . $val['cabinet'] . ")"}} </p>
 
+                            @if(Auth::check())
                             <!-- Modal -->
-                            @include('schedule.template.modal')
+                                @include('schedule.template.modal')
+                                <form action="{{ route('delete') }}" method="post">
 
-                            <form action="{{ route('delete') }}" method="post">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-success" data-toggle="modal"
+                                            data-target="#{{$modalId}}">
+                                        Редактировать
+                                    </button>
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger" value="{{ $val['id'] }}"
+                                            name="deleteID">
+                                        Удалить
+                                    </button>
+                                </form>
+                            @endif
 
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-success" data-toggle="modal"
-                                        data-target="#{{$modalId}}">
-                                    Редактировать
-                                </button>
-                                @csrf
-                                <button type="submit" class="btn btn-danger" value="{{ $val['id'] }}"
-                                        name="deleteID">
-                                    Удалить
-                                </button>
-                            </form>
                         </div>
                     </div>
                     <br>
-
-
-
                 @endforeach
             @endforeach
         @else
