@@ -5,18 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Models\Schedule;
 use App\Library\Utils\Utils;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Cast\Object_;
-use PhpParser\Node\Scalar\String_;
 
 class ScheduleController extends Controller
 {
 
     public function index($day = 'all')
     {
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         $list = Schedule::getList($day);
+        $new_list = [];
+        foreach ($list as $item => $value) {
+            if ($list[$item]['day'] === next($list[$item])) {
+                krsort($list[$item]);
+                $new_list[$days[$value['day'] - 1]][] = $list[$item];
+            }
+        }
+
+
         return view($this->getView(), [
-            'data' => $list
+            'data' => $new_list
         ]);
     }
 
@@ -57,7 +64,8 @@ class ScheduleController extends Controller
 
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         $deleteID = $request->all()['deleteID'];
         Schedule::destroy($deleteID);
         return back();

@@ -14,33 +14,33 @@
                 <div class="modal-body">
                     <label for="recipient-name" class="col-form-label">Название</label>
                     <input required type="text" class="form-control" name="name"
-                           value="{{ $values['name'] }}">
+                           value="{{ $val['name'] }}">
                     <label for="recipient-name" class="col-form-label">Препод</label>
                     <input required type="text" class="form-control" name="teacher"
-                           value="{{ $values['teacher'] }}">
+                           value="{{ $val['teacher'] }}">
                     <label for="recipient-name" class="col-form-label">Кабинет</label>
                     <input required type="number" class="form-control" name="cabinet"
                            maxlength="3"
-                           value="{{ $values['cabinet'] }}">
+                           value="{{ $val['cabinet'] }}">
                     <div class="row">
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Начало</label>
                             <input required type="text" name="start_time" class="form-control"
                                    maxlength="5"
-                                   value="{{ $values['start_time'] }}">
+                                   value="{{ $val['start_time'] }}">
                         </div>
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Конец</label>
                             <input required type="text" name="end_time" class="form-control"
                                    maxlength="5"
-                                   value="{{ $values['end_time'] }}">
+                                   value="{{ $val['end_time'] }}">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть
                     </button>
-                    <button type="submit" class="btn btn-primary" value="{{ $values['id'] }}"
+                    <button type="submit" class="btn btn-primary" value="{{ $val['id'] }}"
                             name="id">Сохранить
                     </button>
                 </div>

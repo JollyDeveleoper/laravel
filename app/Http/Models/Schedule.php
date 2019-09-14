@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
@@ -22,14 +23,14 @@ class Schedule extends Model
         if ($day !== 'all') {
             $data = $data->where('day', self::getDay($day));
         }
-        return $data->sortBy('day')->toArray();
+        return $data->sortBy('day')->sortByDesc('created_at')->toArray();
     }
 
     /**
      * Получаем все пары на определенный день
      *
      * @param int $day
-     * @return Schedule[]|\Illuminate\Database\Eloquent\Collection
+     * @return Schedule[]|Collection
      */
     public static function get(int $day)
     {
