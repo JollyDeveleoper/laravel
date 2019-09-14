@@ -21,9 +21,13 @@
 
         @if($data)
             @foreach($data as $item => $values)
-
+                @php($isToday = date('w') === $values[0]['day'])
                 <h3 id="{{  __('app.days.'.$values[0]['day']) }}">
-                    {{  __('app.days.'.$values[0]['day']) }}
+                    @if($isToday)
+                        <small class="badge badge-pill badge-primary">{{ __('app.days.'.$values[0]['day']) }}</small>
+                    @else
+                        {{  __('app.days.'.$values[0]['day']) }}
+                    @endif
                 </h3>
                 @if(Auth::check())
                     <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addModal">
@@ -31,10 +35,7 @@
                     </button><br>
                 @endif
                 @foreach($values as $val)
-                    @php
-                        $isToday = date('w') === $val['day'];
-                        $modalId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7); // Уникальный id для модалки
-                    @endphp
+                    @php($modalId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
                     @if(Auth::check())
                         @include('schedule.template.modal_add')
                     @endif
