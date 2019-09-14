@@ -22,13 +22,11 @@
                     <div class="row">
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Начало</label>
-                            <input required type="text" name="start_time" class="form-control"
-                                   maxlength="5">
+                            <input required type="time" name="start_time" class="form-control">
                         </div>
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Конец</label>
-                            <input required type="text" name="end_time" class="form-control"
-                                   maxlength="5">
+                            <input required type="time" name="end_time" class="form-control">
                         </div>
                     </div>
                 </div>
