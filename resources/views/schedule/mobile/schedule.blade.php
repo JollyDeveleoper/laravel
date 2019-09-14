@@ -35,16 +35,16 @@
                         {{  __('app.days.'.$values[0]['day']) }}
                     @endif
                 </h3>
+                @php($modalAddId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
+
                 @if(Auth::check())
-                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addModal">
-                        Добавить
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
+                            data-target="#{{$modalAddId}}">Добавить
                     </button><br>
                 @endif
                 @foreach($values as $val)
                     @php($modalId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
-                    @if(Auth::check())
-                        @include('schedule.template.modal_add')
-                    @endif
+
 
                     <div class="card">
                         <div class="card-body">
@@ -53,6 +53,8 @@
                             <p class="card-text">{{ $val['name'] . " (" . $val['cabinet'] . ")"}} </p>
 
                             @if(Auth::check())
+                                @include('schedule.template.modal_add')
+
                             <!-- Modal -->
                                 @include('schedule.template.modal')
                                 <form action="{{ route('delete') }}" method="post">

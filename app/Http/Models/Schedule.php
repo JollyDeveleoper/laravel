@@ -23,7 +23,7 @@ class Schedule extends Model
         if ($day !== 'all') {
             $data = $data->where('day', self::getDay($day));
         }
-        return $data->toArray();
+        return $data->sortBy('day')->toArray();
     }
 
     /**

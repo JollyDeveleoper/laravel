@@ -11,19 +11,29 @@ class ScheduleController extends Controller
 
     public function index($day = 'all')
     {
-        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-        $sortBy = "start_time";
-        $list = Schedule::getList($day);
-        usort($list, function ($l, $r) use ($sortBy) {
-            return strcmp($l[$sortBy], $r[$sortBy]);
-        });
+        $days = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскрсенье'];
+        $sortBy1 = "start_time";
+        $list = Schedule::getList($day); // исходные данные
+
 
         $new_list = [];
+        // Создаем списки по дням недель
         foreach ($list as $item => $value) {
             if ($list[$item]['day'] === next($list[$item])) {
-
-                $new_list[$days[$value['day'] - 1]][] = $list[$item];
+                $new_list[$value['day']][] = $list[$item];
             }
+        }
+
+        // Сортируем пары в каждом дне
+        $size = count($new_list);
+        for ($i = 1; $i < $size; ++$i) {
+            if (isset($new_list[$i])) {
+
+                usort($new_list[$i], function ($a, $b) {
+                    return $a['start_time'] <=> $b['start_time'];
+                });
+            }
+
         }
         unset($list);
 
@@ -31,6 +41,7 @@ class ScheduleController extends Controller
             'data' => $new_list
         ]);
     }
+
 
     private static function getView()
     {
