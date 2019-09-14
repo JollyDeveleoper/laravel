@@ -14,18 +14,18 @@ class ScheduleController extends Controller
         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         $sortBy = "start_time";
         $list = Schedule::getList($day);
-        usort($list, function($l, $r) use ($sortBy){
+        usort($list, function ($l, $r) use ($sortBy) {
             return strcmp($l[$sortBy], $r[$sortBy]);
         });
 
         $new_list = [];
         foreach ($list as $item => $value) {
             if ($list[$item]['day'] === next($list[$item])) {
-                krsort($list[$item]);
 
                 $new_list[$days[$value['day'] - 1]][] = $list[$item];
             }
         }
+        unset($list);
 
         return view($this->getView(), [
             'data' => $new_list
@@ -49,6 +49,7 @@ class ScheduleController extends Controller
         $item->cabinet = $data['cabinet'];
 
         $item->save();
+        session()->put('success', __('app.success_edit'));
         return back();
     }
 
@@ -65,6 +66,7 @@ class ScheduleController extends Controller
         $item->cabinet = $data['cabinet'];
 
         $item->save();
+        session()->put('success', __('app.success_add'));
         return back();
 
     }
@@ -73,6 +75,7 @@ class ScheduleController extends Controller
     {
         $deleteID = $request->all()['deleteID'];
         Schedule::destroy($deleteID);
+        session()->put('success', __('app.success_delete'));
         return back();
     }
 }

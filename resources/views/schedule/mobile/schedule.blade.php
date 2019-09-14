@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="container">
+        @if(session()->has('success'))
+            <div class="alert alert-success" role="alert">
+                {{ __(session()->get('success')) }}
+                {{ session()->forget('success') }}
+            </div>
+        @endif
         <select class="form-control" onchange="this.value !== '' ? location = this.value : ''; this.select">
             <option value="">Выберите</option>
             <option value="{{ url('schedule/') }}">На неделю</option>
