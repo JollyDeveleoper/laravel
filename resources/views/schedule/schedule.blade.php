@@ -5,23 +5,47 @@
         <span class="title">Расписание</span>
 
         @foreach($data as $item => $values)
-            @php
-                $isToday = date('w') === $values[0]['day'];
-            @endphp
+            @php($isToday = date('w') === $values[0]['day'])
+            @php($modalAddId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
+
             <h2 class="mb-2 mt-2">
                 {{__('app.days.'.$values[0]['day'])}}
                 @if($isToday)
                     <small class="badge badge-pill badge-primary">Сегодня</small>
                 @endif
+                @if(Auth::check())
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#{{$modalAddId}}">Добавить</button><br>
+                @endif
             </h2>
             @foreach($values as $val)
+                @php($modalId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
 
                 <div class="mr-2  mt-2 mb-3 rounded-lg shadow p-3   d-inline-block " style="min-width: 300px">
                     <div class="card-title font-weight-bold">{{ $val['start_time'] . ' - ' . $val['end_time'] }}</div>
                     <small>{{ $val['teacher'] }}</small>
                     <p class="card-text">{{ $val['name'] }}</p>
                     <span class="font-weight-bold">Кабинет:</span> {{ $val['cabinet'] }}
+                    <br>
+                    @if(Auth::check())
+                        @include('schedule.template.modal_add')
 
+                    <!-- Modal -->
+                        @include('schedule.template.modal')
+                        <form action="{{ route('delete') }}" method="post">
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                    data-target="#{{$modalId}}">
+                                Редактировать
+                            </button>
+                            @csrf
+                            <button type="submit" class="btn btn-danger" value="{{ $val['id'] }}"
+                                    name="deleteID">
+                                Удалить
+                            </button>
+                        </form>
+                    @endif
                 </div>
             @endforeach
         @endforeach
