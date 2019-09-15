@@ -38,7 +38,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $data = $request->all();
-        if (Auth::attempt(['login' => $data['login'], 'password' => $data['password']])) {
+        if (Auth::attempt(['login' => $data['login'], 'password' => $data['password']], true)) {
             return redirect()->intended($this->redirectTo);
         }
         return redirect()->back();
@@ -52,7 +52,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request) {
         Auth::logout();
-        return redirect('/login');
+        return redirect('/schedule');
     }
 
     /**
