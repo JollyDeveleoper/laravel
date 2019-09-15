@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Schedule;
 use App\Library\Utils\Utils;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -11,10 +12,7 @@ class ScheduleController extends Controller
 
     public function index($day = 'all')
     {
-        $days = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскрсенье'];
-        $sortBy1 = "start_time";
         $list = Schedule::getList($day); // исходные данные
-
 
         $new_list = [];
         // Создаем списки по дням недель
@@ -24,21 +22,21 @@ class ScheduleController extends Controller
             }
         }
 
-        // Сортируем пары в каждом дне
-        $size = count($new_list);
-        for ($i = 1; $i < $size; ++$i) {
-            if (isset($new_list[$i])) {
-
-                usort($new_list[$i], function ($a, $b) {
-                    return $a['start_time'] <=> $b['start_time'];
-                });
-            }
+        $new_1 = [];
+        foreach ($new_list as $lb) {
+            usort($lb, function ($a, $b) use ($new_list) {
+                return new DateTime($a['start_time']) <=> new DateTime($b['start_time']);
+            });
+            $new_1[] = $lb;
+            unset($lb);
 
         }
+
         unset($list);
+        unset($new_list);
 
         return view($this->getView(), [
-            'data' => $new_list
+            'data' => $new_1
         ]);
     }
 
