@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,8 +24,22 @@ class Schedule extends Model
         if ($day !== 'all') {
             $data = $data->where('day', self::getDay($day));
         }
-        return $data->sortBy('day')->toArray();
+        // Список пар из базы
+        $list = $data->sortBy('day')->toArray();
+
+        // Сортируем по дня недели и времени началу пар
+        $sort = new Sort();
+        $sortedListByDay = $sort->getSortedListByDay($list);
+        $sortedListByTime = $sort->getSortedListByStartTime($sortedListByDay);
+
+        unset($sortedListByDay);
+        unset($list);
+        unset($data);
+
+        return $sortedListByTime;
     }
+
+
 
     /**
      * Получаем все пары на определенный день
@@ -64,5 +79,44 @@ class Schedule extends Model
     private function getSchedules(int $day)
     {
         return self::all()->where('day', $day);
+    }
+}
+
+class Sort {
+    /**
+     * Возвращает отсортированный массив по дням недели
+     *
+     * @param array $list
+     * @return array
+     */
+    public function getSortedListByDay(array $list): array
+    {
+        $new_list = [];
+        // Создаем списки по дням недель
+        foreach ($list as $item => $value) {
+            if ($list[$item]['day'] === next($list[$item])) {
+                $new_list[$value['day']][] = $list[$item];
+            }
+        }
+        return $new_list;
+    }
+
+    /**
+     * Возвращает отсортированный ассцоиативный массив по времени начала пары
+     *
+     * @param array $list
+     * @return array
+     */
+    public  function getSortedListByStartTime(array $list): array
+    {
+        $new_1 = [];
+        foreach ($list as $lb) {
+            usort($lb, function ($a, $b) use ($list) {
+                return new DateTime($a['start_time']) <=> new DateTime($b['start_time']);
+            });
+            $new_1[] = $lb;
+            unset($lb);
+        }
+        return $new_1;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Schedule;
 use App\Library\Utils\Utils;
-use DateTime;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -14,29 +13,8 @@ class ScheduleController extends Controller
     {
         $list = Schedule::getList($day); // исходные данные
 
-        $new_list = [];
-        // Создаем списки по дням недель
-        foreach ($list as $item => $value) {
-            if ($list[$item]['day'] === next($list[$item])) {
-                $new_list[$value['day']][] = $list[$item];
-            }
-        }
-
-        $new_1 = [];
-        foreach ($new_list as $lb) {
-            usort($lb, function ($a, $b) use ($new_list) {
-                return new DateTime($a['start_time']) <=> new DateTime($b['start_time']);
-            });
-            $new_1[] = $lb;
-            unset($lb);
-
-        }
-
-        unset($list);
-        unset($new_list);
-
         return view($this->getView(), [
-            'data' => $new_1
+            'data' => $list
         ]);
     }
 
