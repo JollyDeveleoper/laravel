@@ -42,7 +42,7 @@ class BotController extends Controller
                 $text = $object['text']; // Юзер нажал кнопку на клавиатуре
 
                 $isUpdate = $text === 'update';
-                if (!$payload) {
+                if (!$payload && !$isUpdate) {
                     break;
                 }
 
