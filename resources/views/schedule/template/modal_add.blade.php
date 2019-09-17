@@ -13,12 +13,11 @@
 
                 <div class="modal-body">
                     <label for="recipient-name" class="col-form-label">Название</label>
-                    <input required type="text" class="form-control" name="name">
+                    <input required type="text" class="form-control" name="name" placeholder="Название предмета">
                     <label for="recipient-name" class="col-form-label">Преподаватель</label>
-                    <input required type="text" class="form-control" name="teacher">
+                    <input required type="text" class="form-control" name="teacher" placeholder="Имя перподавателя">
                     <label for="recipient-name" class="col-form-label">Кабинет</label>
-                    <input required type="number" class="form-control" name="cabinet"
-                           maxlength="3">
+                    <input class="form-control" name="cabinet" maxlength="9" placeholder="Номер аудитории">
                     <div class="row">
                         <div class="col">
                             <label for="recipient-name" class="col-form-label">Начало</label>
