@@ -15,9 +15,9 @@
                     <label for="recipient-name" class="col-form-label">Название</label>
                     <input required class="form-control" name="name"
                            value="{{ $val['name'] }}" placeholder="Название предмета">
-                    <label for="recipient-name" class="col-form-label" placeholder="Имя перподавателя">Препод</label>
+                    <label for="recipient-name" class="col-form-label">Препод</label>
                     <input required class="form-control" name="teacher"
-                           value="{{ $val['teacher'] }}">
+                           value="{{ $val['teacher'] }}" placeholder="Имя перподавателя">
                     <label for="recipient-name" class="col-form-label">Кабинет</label>
                     <input required class="form-control" name="cabinet"
                            maxlength="9" placeholder="Номер аудитории"
