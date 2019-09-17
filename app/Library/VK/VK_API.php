@@ -29,7 +29,7 @@ class VK_API
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => config('api.VK_TEST_CHAT_ID'),
+            'peer_id' => config('api.VK_CHAT_ID'),
             'message' => $message,
         );
         self::request($request_params, $method);
@@ -40,7 +40,7 @@ class VK_API
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => config('api.VK_TEST_CHAT_ID'),
+            'peer_id' => config('api.VK_CHAT_ID'),
             'message' => $message,
             'keyboard' => self::getKeyboard()
         );

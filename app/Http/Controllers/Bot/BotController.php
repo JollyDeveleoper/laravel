@@ -42,7 +42,7 @@ class BotController extends Controller
                 $text = $object['text']; // Юзер нажал кнопку на клавиатуре
 
                 $isUpdate = $text === 'update';
-                if ($chat_id === config('api.VK_CHAT_ID') || !$payload && !$isUpdate) {
+                if (!$payload) {
                     break;
                 }
 
