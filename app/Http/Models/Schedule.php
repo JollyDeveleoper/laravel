@@ -68,7 +68,7 @@ class Schedule extends Model
     {
         $day = date('w');
         $current_time = date('H:i');
-        $result = $this->getSchedules($day)->firstWhere('start_time', '>', $current_time);
+        $result = $this->getSchedules($day)->sortBy('start_time')->firstWhere('start_time', '>', $current_time);
         $arr = [];
         if ($result !== null) {
             $arr = $result->toArray();
