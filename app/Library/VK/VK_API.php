@@ -24,12 +24,12 @@ class VK_API
         self::request($request_params, $method);
     }
 
-    public static function sendMessage($message)
+    public static function sendMessage($message, $chat_id)
     {
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => config('api.VK_CHAT_ID'),
+            'peer_id' => $chat_id,
             'message' => $message,
         );
         self::request($request_params, $method);

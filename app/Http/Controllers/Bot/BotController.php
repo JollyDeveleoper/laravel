@@ -52,7 +52,7 @@ class BotController extends Controller
                     break;
                 }
 
-                VK_API::sendMessage($this->findScheduleOnDay($payload));
+                VK_API::sendMessage($this->findScheduleOnDay($payload), $chat_id);
 //                echo $this->findScheduleOnDay($payload);
         }
         return response('ok');
