@@ -11,6 +11,13 @@ class BotController extends Controller
 {
     private const SUNDAY = 7;
     private const NEXT_COUPLE = 10;
+    private $chat_id = 0;
+
+    private $isEditMode = false; // находимся в режие редактирования
+    private $isAdd = false; // в режиме добавления пары
+    private $isEdit = false; // в режиме редактирования пары
+    private $daySelected = 0; // Какой день редактируем
+    private $coupleInfo = []; // Массив с данными о паре
 
     public function __construct()
     {
@@ -39,16 +46,29 @@ class BotController extends Controller
                 break;
             case config('api.VK_EVENT_MESSAGE_NEW'):
                 $chat_id = $object['peer_id']; // id чата, в котором произошло событие
-                $text = $object['text']; // Юзер нажал кнопку на клавиатуре
+                $this->chat_id = $chat_id;
+                $text = $object['text'];
 
                 $isUpdate = $text === 'update';
+                // Не реагируем на обычный текст
                 if (!$payload && !$isUpdate) {
+                    break;
+                }
+
+                if ($text === 'edit' || $this->isEditMode) {
+                    // Если мы уже выбрали день
+                    if ($this->daySelected !== 0) {
+                        $text = $this->setCoupleInfo();
+                        VK_API::sendMessage($text, $chat_id);
+                    }
+                    $this->isEditMode = true;
+                    $this->parseEditCommand($payload);
                     break;
                 }
 
                 // Обновляем клавиатуру
                 if ($isUpdate) {
-                    VK_API::updateKeyboard($chat_id);
+                    VK_API::sendMessage('Клавиатура обновлена', $chat_id, VK_API::getKeyboard());
                     break;
                 }
 
@@ -56,6 +76,72 @@ class BotController extends Controller
 //                echo $this->findScheduleOnDay($payload);
         }
         return response('ok');
+    }
+
+    /**
+     * Парсим команды редактирования и отдаем соответствующую клавиатуру
+     * 0-10 основные команды
+     * 20-30 - команды редактирования
+     *
+     * @param $action
+     */
+    private function parseEditCommand(int $action) {
+        $editMode = new BotEditController();
+        $keyboardPath = 'Library/VK/Keyboard/';
+
+        if ($this->daySelected > 0) {
+            if ($this->isAdd) {
+                VK_API::sendMessage($this->setCoupleInfo(), $this->chat_id);
+                return;
+            }
+        }
+
+        $text = 'FUCK';
+
+        // Выбор дня недели
+        if ($action <= 7) {
+            $this->daySelected = $action;
+            $keyboardPath .= 'Edit/select_day';
+            VK_API::sendMessage('Что дальше?', $this->chat_id, file_get_contents(app_path($keyboardPath . '.json')));
+            return;
+        }
+
+        switch ($action) {
+            case 20: // добавление пары
+                $text = 'Выберите день';
+                $this->isAdd = true;
+                $keyboardPath .= 'Edit/select_day';
+                break;
+            case 21: // Редактирование пары
+                $text = 'Выберите день';
+                $this->isEdit = true;
+                $keyboardPath .= 'Edit/select_day';
+                break;
+            case 22: // Сохраняем
+                $this->resetEditMode();
+                if ($this->isAdd) {
+                    $editMode->add($this->daySelected, $this->coupleInfo);
+                }
+
+                $editMode->edit($this->daySelected, $this->coupleInfo);
+                $keyboardPath .= 'keyboard';
+                $text = 'Понял. Принял. Сохранил';
+                break;
+
+            case 100: // Отменили редактирование. Возвращаем на место стандартную клаву
+                $this->resetEditMode();
+                $keyboardPath .= 'keyboard';
+                $text = 'Ну ок, продолжаю следить за расписанием';
+                break;
+        }
+
+        VK_API::sendMessage($text, $this->chat_id, file_get_contents(app_path($keyboardPath . '.json')));
+    }
+
+    private function resetEditMode() {
+        $this->isEdit = false;
+        $this->isAdd = false;
+        $this->isEditMode = false;
     }
 
     /**
@@ -135,5 +221,15 @@ class BotController extends Controller
         $name = $data['name'] . ' (' . $data['cabinet'] . 'каб.)';
         $text = "$time $name \n\n";
         return $text;
+    }
+
+    // TODO доделать
+    private function setCoupleInfo()
+    {
+        $info = $this->coupleInfo;
+        if (isset($info['name'])) {
+            return 'Введите номер кабинета';
+        }
+
     }
 }

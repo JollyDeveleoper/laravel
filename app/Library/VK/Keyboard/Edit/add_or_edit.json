@@ -1,0 +1,33 @@
+{
+    "one_time": false,
+    "buttons": [
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "20",
+                    "label": "Добавить"
+                },
+                "color": "secondary"
+            },
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "21",
+                    "label": "Редактировать"
+                },
+                "color": "secondary"
+            }
+        ],
+        [
+            {
+                "action": {
+                    "type": "text",
+                    "payload": "100",
+                    "label": "Отменить"
+                },
+                "color": "danger"
+            }
+        ]
+    ]
+}
