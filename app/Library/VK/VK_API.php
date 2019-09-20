@@ -35,12 +35,12 @@ class VK_API
         self::request($request_params, $method);
     }
 
-    public static function updateKeyboard($message = 'Клавиатура обновлена!')
+    public static function updateKeyboard($chat_id, $message = 'Клавиатура обновлена!')
     {
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => config('api.VK_CHAT_ID'),
+            'peer_id' => $chat_id,
             'message' => $message,
             'keyboard' => self::getKeyboard()
         );

@@ -48,7 +48,7 @@ class BotController extends Controller
 
                 // Обновляем клавиатуру
                 if ($isUpdate) {
-                    VK_API::updateKeyboard();
+                    VK_API::updateKeyboard($chat_id);
                     break;
                 }
 
