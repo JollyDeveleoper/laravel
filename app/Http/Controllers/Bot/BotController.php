@@ -42,8 +42,9 @@ class BotController extends Controller
                 break;
             case config('api.VK_EVENT_MESSAGE_NEW'):
                 $chat_id = $object['peer_id']; // id чата, в котором произошло событие
-                $text = $object['text']; // Юзер нажал кнопку на клавиатуре
+                $text = $object['text'];
 
+                // Отключаем работу при обычной переписке
                 $isUpdate = $text === 'update';
                 if (!$payload && !$isUpdate) {
                     break;
@@ -52,7 +53,7 @@ class BotController extends Controller
                 // Обновляем клавиатуру
                 if ($isUpdate) {
                     $keyboard = file_get_contents(app_path('Library/VK/keyboard.json'));
-                    VK_API::sendMessage('Клавиатура обновлена', $chat_id, $keyboard);
+                    VK_API::sendMessage(__('app.keyboard_update'), $chat_id, $keyboard);
                     break;
                 }
 
@@ -71,12 +72,12 @@ class BotController extends Controller
     private function findScheduleOnDay(int $day): string
     {
         // Следующая пара
-        if ($day === self::NEXT_COUPLE) {
+        if ($day === BotController::NEXT_COUPLE) {
             return $this->getNextCouple();
         }
 
         // На сегодня или завтра
-        return $this->getSchedule($day < self::SUNDAY ? $day : (int)$this->parseDays($day));
+        return $this->getSchedule($day < BotController::SUNDAY ? $day : (int)$this->parseDays($day));
     }
 
     /**
@@ -102,7 +103,7 @@ class BotController extends Controller
 
         $data = $this->schedule->schedule($day);
 
-        if (!$data) return 'Пары не найдены';
+        if (!$data) return __('app.couple_not_found');
 
         $text = null;
         foreach ($data as $item) {
@@ -122,7 +123,7 @@ class BotController extends Controller
     {
         $data = $this->schedule->nextCouple();
 
-        if (!$data) return 'Следующая пара не найдена';
+        if (!$data) return __('app.next_couple_not_found');
 
         return $this->getText((array)$data);
     }
