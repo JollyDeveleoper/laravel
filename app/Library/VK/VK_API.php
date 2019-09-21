@@ -28,7 +28,7 @@ class VK_API
         $method = 'messages.send';
         $request_params = array(
             'random_id' => rand(),
-            'peer_id' => config('api.VK_NEW_CHAT_ID'),
+            'peer_id' => config('api.VK_CHAT_ID'),
             'attachment' => 'wall' . config('api.VK_DPK_ID') . '_' . $post_id,
         );
         self::request($request_params, $method);
