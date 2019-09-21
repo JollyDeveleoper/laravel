@@ -136,7 +136,8 @@ class BotController extends Controller
      */
     private function getText(array $data): string
     {
-        $time = $data['start_time'] . ' - ' . $data['end_time'] . "\n";
+        $start_time = $data['start_time'];
+        $time = config('bot.time_of_day.'.$start_time) . ' ' .$start_time . ' - ' . $data['end_time'] . "\n";
         $name = $data['name'] . ' (' . $data['cabinet'] . 'каб.)';
         $text = "$time $name \n\n";
         return $text;
