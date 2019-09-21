@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $table = 'schedules';
+    protected $fillable  = ['name', 'teacher', 'cabinet', 'start_time', 'end_time'];
 
     /**
      * Если получаем ..schedule/today или ..schedule/tomorrow,
