@@ -1,38 +1,34 @@
-# Laravel 5.8 for Laravel Shift
+# VK Schedule Bot
 
-This repository contains the latest version of Laravel 5.8. It is used as a reference by [Laravel Shift - the automated way to upgrade Laravel applications](https://laravelshift.com).
+Данный Laravel проект представляет собой VK Bot'a, который показывает расписание в чате на определенный день недели  
+Так же бот может делать репост новой записи из группы в определенный чат
 
-## Laravel Shift
-*Laravel Shift* focuses on providing automated and [human services](https://laravelshift.com/human-services) for upgrading and improving your Laravel applications.
+##Функционал
+* Получение пар с понедельника по субботу включительно
+* Получение следующей пары текущего дня
+* Получение пар на сегодня
+* Получение пар на завтра
+* Просмотр всех пар на сайте (https://yourdomain.ru/), где **yourdomain** - ваш домен  
+_P.S. Путь зависит от настроек веб-сервера_
+* Редактирование пар
+* Удаление пар
+* Добавление пар
 
-Shifts for *Laravel* include:
+##Инструкция
+Установка проекта не отличается от обычной установки laravel, кроме нескольких моментов  
+* В сконфигурированном **.env** файле необходимо указать ID группы, от которой будет работать бот, и токен группы для запросов к API VK
+```no-highlight 
+VK_TOKEN = 
+VK_GROUP = 
+```
+* Необходимо создать базу данных **reposter_bot.sqlite** и выполнить:
+```no-highlight 
+php artisan migrate
+```
 
-- [Laravel 5.0 Shift - upgrade from Laravel 4.2 to 5.0](https://laravelshift.com/upgrade-laravel-4.2-to-laravel-5.0)
-- [Laravel 5.1 Shift - upgrade from Laravel 5.0 to 5.1](https://laravelshift.com/upgrade-laravel-5.0-to-laravel-5.1) 
-- [Laravel 5.2 Shift - upgrade from Laravel 5.1 to 5.2](https://laravelshift.com/upgrade-laravel-5.1-to-laravel-5.2) 
-- [Laravel 5.3 Shift - upgrade from Laravel 5.2 to 5.3](https://laravelshift.com/upgrade-laravel-5.2-to-laravel-5.3)
-- [Laravel 5.4 Shift - upgrade from Laravel 5.3 to 5.4](https://laravelshift.com/upgrade-laravel-5.3-to-laravel-5.4)
-- [Laravel 5.5 Shift - upgrade from Laravel 5.4 to 5.5](https://laravelshift.com/upgrade-laravel-5.4-to-laravel-5.5)
-- [Laravel 5.6 Shift - upgrade from Laravel 5.5 to 5.6](https://laravelshift.com/upgrade-laravel-5.5-to-laravel-5.6)
-- [Laravel 5.7 Shift - upgrade from Laravel 5.6 to 5.7](https://laravelshift.com/upgrade-laravel-5.6-to-laravel-5.7)
-- [Laravel 5.8 Shift - upgrade from Laravel 5.7 to 5.8](https://laravelshift.com/upgrade-laravel-5.7-to-laravel-5.8)
-- [Laravel Tests Shift - upgrade tests from BrowserKit](https://laravelshift.com/upgrade-laravel-5.3-tests-to-laravel-5.4-tests)
-- [Laravel Linter - detect lint in your Laravel project](https://laravelshift.com/laravel-linter) 
-- [Laravel Analyzer - are you following the "Laravel Way"](https://laravelshift.com/opinionated-laravel-way-shift) 
-- [Laravel Fixer - automate changes to the "Laravel Way"](https://laravelshift.com/laravel-code-fixer) 
-- [Consolidate Namespace Shift - condense custom namespaces with Laravel](https://laravelshift.com/laravel-consolidate-custom-namespaces)
-
-
-Shifts for *Lumen* include:
-
-- [Lumen to Laravel - convert a Lumen project to Laravel](https://laravelshift.com/convert-lumen-to-laravel) 
-
-
-Shifts for *PHP* include:
-
-- [PHP 5.5 Shift - upgrade from PHP 5.x to 5.5](https://laravelshift.com/upgrade-php5-to-php5.5)
-- [PHP 5.6 Shift - upgrade from PHP 5.5 to 5.6](https://laravelshift.com/upgrade-php-5.5-to-php-5.6)
-- [PHP 7.0 Shift - upgrade from PHP 5.6 to 7.0](https://laravelshift.com/upgrade-php-5.6-to-php-7.0)
-- [PSR-2 - adopt the PSR-2 code style](https://laravelshift.com/upgrade-psr2-code-style-standard)
-- [PSR-4 - upgrade from PSR-0 to PSR-4](https://laravelshift.com/upgrade-namespace-psr0-psr4)
-- [Mysqli Shift - covert mysql to mysqli](https://laravelshift.com/upgrade-mysql-mysqli)
+* Редактирование, удаление и добавление пар работает только через сайт, и только после авторизации, поэтому после установки проекта необходимо выполнить
+```
+php artisan make:auth
+```
+### Примечание
+Отслеживания изменения пар нет, все редактируется вручную. Данный проект не позиционируется как граббер с какого-либо сайта 
