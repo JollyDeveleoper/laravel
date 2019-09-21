@@ -12,9 +12,12 @@ class BotController extends Controller
     private const SUNDAY = 7;
     private const NEXT_COUPLE = 10;
 
-    public function __construct()
+    private $schedule;
+
+    public function __construct(Schedule $schedule)
     {
         date_default_timezone_set('Europe/Samara');
+        $this->schedule = $schedule;
     }
 
     public function index(Request $request)
@@ -48,7 +51,8 @@ class BotController extends Controller
 
                 // Обновляем клавиатуру
                 if ($isUpdate) {
-                    VK_API::updateKeyboard($chat_id);
+                    $keyboard = file_get_contents(app_path('Library/VK/keyboard.json'));
+                    VK_API::sendMessage('Клавиатура обновлена', $chat_id, $keyboard);
                     break;
                 }
 
@@ -96,7 +100,7 @@ class BotController extends Controller
     function getSchedule(int $day): string
     {
 
-        $data = Schedule::schedule($day);
+        $data = $this->schedule->schedule($day);
 
         if (!$data) return 'Пары не найдены';
 
@@ -116,11 +120,11 @@ class BotController extends Controller
      */
     private function getNextCouple(): string
     {
-        $data = Schedule::nextCouple();
+        $data = $this->schedule->nextCouple();
 
         if (!$data) return 'Следующая пара не найдена';
 
-        return $this->getText($data);
+        return $this->getText((array)$data);
     }
 
     /**
