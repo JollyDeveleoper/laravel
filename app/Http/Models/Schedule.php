@@ -39,31 +39,36 @@ class Schedule extends Model
         return $sortedListByTime;
     }
 
-
-
     /**
-     * Получаем все пары на определенный день
+     * Получение дня недели
      *
-     * @param int $day
-     * @return Schedule[]|Collection
+     * @param string $day
+     * @return mixed
      */
-    public static function get(int $day)
-    {
-        return self::where('day', $day)->get();
-    }
-
     private static function getDay(string $day)
     {
         $day_on_weekly = array('today' => getdate(), 'tomorrow' => getdate(strtotime('tomorrow')));
         return $day_on_weekly[$day]['wday'];
     }
 
+    /**
+     * Получение всех пар на определенный день
+     *
+     * @param $query
+     * @param int $day
+     * @return array
+     */
     public function scopeSchedule($query, int $day): array
     {
         $data = $this->getSchedules($day)->sortBy('start_time')->toArray();
         return $data;
     }
 
+    /**
+     * Получение следующей пары на текущий день
+     *
+     * @return array
+     */
     public function scopeNextCouple(): array
     {
         $day = date('w');
@@ -76,12 +81,24 @@ class Schedule extends Model
         return $arr;
     }
 
+    /**
+     * Получаем все пары на определенный день
+     *
+     * @param int $day
+     * @return Schedule[]|Collection
+     */
     private function getSchedules(int $day)
     {
         return self::all()->where('day', $day);
     }
 }
 
+/**
+ * Сортировка расписания по дате начала и дням
+ *
+ * Class Sort
+ * @package App\Http\Models
+ */
 class Sort {
     /**
      * Возвращает отсортированный массив по дням недели
