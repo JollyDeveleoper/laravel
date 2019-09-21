@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Schedule;
-use App\Library\Utils\Utils;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -27,7 +26,8 @@ class ScheduleController extends Controller
 
     private static function getView()
     {
-        return Utils::isMobile(\request()) ? 'schedule/mobile/schedule' : 'schedule/schedule';
+        $isMobile = strpos(strtolower(\request()->server('HTTP_USER_AGENT')), 'mobile');
+        return $isMobile ? 'schedule/mobile/schedule' : 'schedule/schedule';
     }
 
     public function edit(Request $request)
