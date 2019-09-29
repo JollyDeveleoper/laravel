@@ -32,15 +32,15 @@
 
                     <!-- Modal -->
                         @include('schedule.template.modal')
-                        <form action="{{ route('delete') }}" method="post">
+                        <form action="{{ route('delete') }}" method="post" class="btn-group w-100 mt-2" role="group">
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-success" data-toggle="modal"
+                            <button type="button" class="btn btn-success w-50" data-toggle="modal"
                                     data-target="#{{$modalId}}">
                                 Редактировать
                             </button>
                             @csrf
-                            <button type="submit" class="btn btn-danger" value="{{ $val['id'] }}"
+                            <button type="submit" class="btn btn-danger w-50" value="{{ $val['id'] }}"
                                     name="deleteID">
                                 Удалить
                             </button>
