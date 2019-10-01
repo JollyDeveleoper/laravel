@@ -17,9 +17,7 @@
                     "label": "Вторник"
                 },
                 "color": "secondary"
-            }
-        ],
-        [
+            },
             {
                 "action": {
                     "type": "text",
@@ -27,7 +25,9 @@
                     "label": "Среда"
                 },
                 "color": "secondary"
-            },
+            }
+        ],
+        [
             {
                 "action": {
                     "type": "text",
@@ -35,9 +35,7 @@
                     "label": "Четверг"
                 },
                 "color": "secondary"
-            }
-        ],
-        [
+            },
             {
                 "action": {
                     "type": "text",
@@ -63,9 +61,7 @@
                     "label": "Завтра"
                 },
                 "color": "secondary"
-            }
-        ],
-        [
+            },
             {
                 "action": {
                     "type": "text",
@@ -80,7 +76,7 @@
                 "action": {
                     "type": "text",
                     "payload": "10",
-                    "label": "Следующая пара"
+                    "label": "След. пара"
                 },
                 "color": "secondary"
             }
