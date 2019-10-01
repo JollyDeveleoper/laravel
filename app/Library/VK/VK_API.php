@@ -49,7 +49,7 @@ class VK_API
             'peer_id' => $chat_id,
             'message' => $message,
         );
-        if (!$keyboard) {
+        if (!empty($keyboard)) {
             $request_params['keyboard'] = $keyboard;
         }
         self::request($request_params, $method);
