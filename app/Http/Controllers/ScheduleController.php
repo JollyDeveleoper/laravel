@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -18,9 +19,15 @@ class ScheduleController extends Controller
     public function index($day = 'all')
     {
         $list = Schedule::getList($day); // исходные данные
+        $current_day = date('w');
+        $isAuth = Auth::check();
+        $count_day = count($list) + 1;
 
         return view($this->getView(), [
-            'data' => $list
+            'data' => $list,
+            'today' => $current_day,
+            'isAuth' => $isAuth,
+            'count_day' => $count_day
         ]);
     }
 

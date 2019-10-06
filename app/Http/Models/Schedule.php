@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $table = 'schedules';
-    protected $fillable  = ['name', 'teacher', 'cabinet', 'start_time', 'end_time', 'day'];
+    protected $fillable = ['name', 'teacher', 'cabinet', 'start_time', 'end_time', 'day'];
 
     /**
      * Если получаем ..schedule/today или ..schedule/tomorrow,
@@ -23,7 +23,7 @@ class Schedule extends Model
     {
         $data = self::all();
         if ($day !== 'all') {
-            $data = $data->where('day', self::getDay($day));
+            $data = $data->where('day', self::getCurrentDay($day));
         }
         // Список пар из базы
         $list = $data->sortBy('day')->toArray();
@@ -46,10 +46,9 @@ class Schedule extends Model
      * @param string $day
      * @return mixed
      */
-    private static function getDay(string $day)
+    public static function getCurrentDay(string $day): int
     {
-        $day_on_weekly = array('today' => getdate(), 'tomorrow' => getdate(strtotime('tomorrow')));
-        return $day_on_weekly[$day]['wday'];
+        return date('w', strtotime($day));
     }
 
     /**
@@ -90,7 +89,7 @@ class Schedule extends Model
      */
     private function getSchedules(int $day)
     {
-        return self::all()->where('day', $day);
+        return self::where('day', $day)->get();
     }
 }
 
@@ -100,7 +99,8 @@ class Schedule extends Model
  * Class Sort
  * @package App\Http\Models
  */
-class Sort {
+class Sort
+{
     /**
      * Возвращает отсортированный массив по дням недели
      *
@@ -125,7 +125,7 @@ class Sort {
      * @param array $list
      * @return array
      */
-    public  function getSortedListByStartTime(array $list): array
+    public function getSortedListByStartTime(array $list): array
     {
         $new_1 = [];
         foreach ($list as $lb) {
