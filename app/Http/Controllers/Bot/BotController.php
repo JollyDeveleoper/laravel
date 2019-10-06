@@ -137,9 +137,19 @@ class BotController extends Controller
     private function getText(array $data): string
     {
         $start_time = $data['start_time'];
-        $time = config('bot.time_of_day.'.$start_time) . ' ' .$start_time . ' - ' . $data['end_time'] . "\n";
-        $name = $data['name'] . ' (' . $data['cabinet'] . 'каб.)';
-        $text = "$time $name \n\n";
+        $end_time = $data['end_time'];
+
+        $teacher_emoji = '👨‍🏫 ';
+        $couple_emoji = '📋 ';
+        $time_emoji = '🕛 ';
+        $cabinet_emoji = '🚪 ';
+
+        $teacher = $teacher_emoji . $data['teacher'] . "\n";
+        $couple = $couple_emoji . $data['name'] . "\n";
+        $time = $time_emoji . $start_time . ' - ' . $end_time . "\n";
+        $cabinet = $cabinet_emoji . $data['cabinet'];
+
+        $text = "$teacher $couple $time $cabinet\n\n";
         return $text;
     }
 }
