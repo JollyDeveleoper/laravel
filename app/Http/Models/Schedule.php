@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $table = 'schedules';
-    protected $fillable  = ['name', 'teacher', 'cabinet', 'start_time', 'end_time', 'day'];
+    protected $fillable = ['name', 'teacher', 'cabinet', 'start_time', 'end_time', 'day'];
 
     /**
      * Если получаем ..schedule/today или ..schedule/tomorrow,
@@ -99,7 +99,8 @@ class Schedule extends Model
  * Class Sort
  * @package App\Http\Models
  */
-class Sort {
+class Sort
+{
     /**
      * Возвращает отсортированный массив по дням недели
      *
@@ -124,7 +125,7 @@ class Sort {
      * @param array $list
      * @return array
      */
-    public  function getSortedListByStartTime(array $list): array
+    public function getSortedListByStartTime(array $list): array
     {
         $new_1 = [];
         foreach ($list as $lb) {

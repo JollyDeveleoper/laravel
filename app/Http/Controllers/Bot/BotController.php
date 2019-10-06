@@ -57,8 +57,8 @@ class BotController extends Controller
                     break;
                 }
 
-//                VK_API::sendMessage($this->findScheduleOnDay($payload), $chat_id);
-                echo $this->findScheduleOnDay($payload);
+                VK_API::sendMessage($this->findScheduleOnDay($payload), $chat_id);
+//                echo $this->findScheduleOnDay($payload);
         }
         return response('ok');
     }
@@ -130,7 +130,7 @@ class BotController extends Controller
     private function getText(array $data): string
     {
         $start_time = $data['start_time'];
-        $time = config('bot.time_of_day.'.$start_time) . ' ' .$start_time . ' - ' . $data['end_time'] . "\n";
+        $time = config('bot.time_of_day.' . $start_time) . ' ' . $start_time . ' - ' . $data['end_time'] . "\n";
         $name = $data['name'] . ' (' . $data['cabinet'] . 'каб.)';
         $text = "$time $name \n\n";
         return $text;
