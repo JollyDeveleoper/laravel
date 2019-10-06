@@ -23,7 +23,7 @@ class Schedule extends Model
     {
         $data = self::all();
         if ($day !== 'all') {
-            $data = $data->where('day', self::getDay($day));
+            $data = $data->where('day', self::getCurrentDay($day));
         }
         // Список пар из базы
         $list = $data->sortBy('day')->toArray();
@@ -46,10 +46,9 @@ class Schedule extends Model
      * @param string $day
      * @return mixed
      */
-    private static function getDay(string $day)
+    public static function getCurrentDay(string $day): int
     {
-        $day_on_weekly = array('today' => getdate(), 'tomorrow' => getdate(strtotime('tomorrow')));
-        return $day_on_weekly[$day]['wday'];
+        return date('w', strtotime($day));
     }
 
     /**
