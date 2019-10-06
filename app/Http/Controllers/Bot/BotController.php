@@ -57,8 +57,8 @@ class BotController extends Controller
                     break;
                 }
 
-                VK_API::sendMessage($this->findScheduleOnDay($payload), $chat_id);
-//                echo $this->findScheduleOnDay($payload);
+//                VK_API::sendMessage($this->findScheduleOnDay($payload), $chat_id);
+                echo $this->findScheduleOnDay($payload);
         }
         return response('ok');
     }
@@ -76,20 +76,13 @@ class BotController extends Controller
             return $this->getNextCouple();
         }
 
-        // На сегодня или завтра
-        return $this->getSchedule($day < BotController::SUNDAY ? $day : (int)$this->parseDays($day));
-    }
+        // На определенный день
+        if ($day < BotController::SUNDAY) {
+            return $this->getSchedule($day);
+        }
 
-    /**
-     * Получение дня в неделе относительно запроса
-     *
-     * @param int $payload
-     * @return int
-     */
-    private static function parseDays(int $payload): int
-    {
-        $day = date('w', strtotime($payload === 8 ? 'tomorrow' : 'today'));
-        return $day;
+        // На сегодня или завтра
+        return $this->getSchedule($this->schedule->getCurrentDay($day === 8 ? 'tomorrow' : 'today'));
     }
 
     /**
