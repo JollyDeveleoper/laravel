@@ -49,11 +49,11 @@
                             <!-- Modal -->
                                 @include('schedule.template.modal')
                                 <form action="{{ route('delete') }}" method="post" class="btn-group w-100" role="group">
+                                    @csrf
                                     <button type="button" class="btn btn-success w-50" data-toggle="modal"
                                             data-target="#{{$modalId}}">
                                         Редактировать
                                     </button>
-                                    @csrf
                                     <button type="submit" class="btn btn-danger w-50" value="{{ $val['id'] }}"
                                             name="deleteID">
                                         Удалить
