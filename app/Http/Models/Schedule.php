@@ -90,7 +90,7 @@ class Schedule extends Model
      */
     private function getSchedules(int $day)
     {
-        return self::all()->where('day', $day);
+        return self::where('day', $day)->get();
     }
 }
 
