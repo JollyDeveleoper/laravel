@@ -1,0 +1,65 @@
+<?php
+
+
+namespace App\Http\Controllers\Api;
+
+
+use App\Http\Models\Schedule;
+use Illuminate\Http\JsonResponse;
+use function request;
+
+class ApiController extends BaseApiController
+{
+    const ALL_LIST = 'all';
+
+    /**
+     * Отдаем все пары на каждый день
+     * Сортировка по времени и дням (пн-сб)
+     *
+     * @return JsonResponse
+     */
+    public function getAllCouples()
+    {
+        $list = Schedule::getList(self::ALL_LIST);
+        return $this->response($list);
+    }
+
+    /**
+     * Отдаем пары на 1 день
+     * Соритровка по времени начала пары
+     *
+     * @return JsonResponse
+     */
+    public function getCouple()
+    {
+        $rules = ['day' => 'required|numeric|max:7'];
+        if (!$this->validate($rules)) {
+            return $this->response(['success' => false, 'message' => 'day is incorrect']);
+        }
+
+        $list = $this->schedule->schedule(request()->get('day'));
+        return $this->response($list);
+    }
+
+    /**
+     * Отдаем следующую пару
+     * Сортировка по времени
+     *
+     * @return JsonResponse
+     */
+    public function getNextCouple() {
+        $list = $this->schedule->nextCouple();
+        return $this->response($list);
+    }
+
+
+    /**
+     * Отдаем врем на сервере
+     *
+     * @return int
+     */
+    public function serverTime() {
+        return $this->response(['time' => time()]);
+    }
+
+}

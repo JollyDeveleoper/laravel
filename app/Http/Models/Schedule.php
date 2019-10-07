@@ -8,6 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
+    private static $sort;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
+    public static function getSortInstance() {
+        if (self::$sort == null) {
+            self::$sort = new Sort();
+        }
+        return self::$sort;
+    }
+
     protected $table = 'schedules';
     protected $fillable = ['name', 'teacher', 'cabinet', 'start_time', 'end_time', 'day'];
 
@@ -19,7 +33,7 @@ class Schedule extends Model
      * @param string $day
      * @return array
      */
-    public static function getList($day)
+    public function getList($day)
     {
         $data = self::all();
         if ($day !== 'all') {
@@ -29,9 +43,8 @@ class Schedule extends Model
         $list = $data->sortBy('day')->toArray();
 
         // Сортируем по дня недели и времени началу пар
-        $sort = new Sort();
-        $sortedListByDay = $sort->getSortedListByDay($list);
-        $sortedListByTime = $sort->getSortedListByStartTime($sortedListByDay);
+        $sortedListByDay = self::getSortInstance()->getSortedListByDay($list);
+        $sortedListByTime = self::getSortInstance()->getSortedListByStartTime($sortedListByDay);
 
         unset($sortedListByDay);
         unset($list);
@@ -60,8 +73,10 @@ class Schedule extends Model
      */
     public function scopeSchedule($query, int $day): array
     {
-        $data = $this->getSchedules($day)->sortBy('start_time')->toArray();
-        return $data;
+        $data = $this->getSchedules($day)->toArray();
+        $asd[] = $data;
+        $new = self::getSortInstance()->getSortedListByStartTime($asd);
+        return $new[0];
     }
 
     /**
@@ -73,7 +88,7 @@ class Schedule extends Model
     {
         $day = date('w');
         $current_time = date('H:i');
-        $result = $this->getSchedules($day)->sortBy('start_time')->firstWhere('start_time', '>', $current_time);
+        $result = $this->getSchedules($day)->firstWhere('start_time', '>', $current_time);
         $arr = [];
         if ($result !== null) {
             $arr = $result->toArray();
@@ -89,7 +104,7 @@ class Schedule extends Model
      */
     private function getSchedules(int $day)
     {
-        return self::where('day', $day)->get();
+        return self::where('day', $day)->get()->sortBy('start_time');
     }
 }
 
