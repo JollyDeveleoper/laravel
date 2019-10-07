@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'api'], function () {
+Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     // Пары на все дни
-    Route::post('/getAllCouples', 'Api\ApiController@getAllCouples');
+    Route::post('/getAllCouples', [ApiController::class, 'getAllCouples']);
 
     // Пары на конкретный день
-    Route::post('/getCouple', 'Api\ApiController@getCouple');
+    Route::post('/getCouple', [ApiController::class, 'getCouple']);
 
     // Следующая пара
-    Route::post('/getNextCouple', 'Api\ApiController@getNextCouple');
+    Route::post('/getNextCouple', [ApiController::class, 'getNextCouple']);
 
     // Время на сервере
-    Route::post('/serverTime', 'Api\ApiController@serverTime');
+    Route::post('/serverTime', [ApiController::class, 'serverTime']);
 
 });
