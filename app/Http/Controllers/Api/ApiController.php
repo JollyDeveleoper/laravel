@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Http\Models\Schedule;
 use Illuminate\Http\JsonResponse;
 use function request;
 
@@ -47,7 +46,8 @@ class ApiController extends BaseApiController
      *
      * @return JsonResponse
      */
-    public function getNextCouple() {
+    public function getNextCouple()
+    {
         $list = $this->schedule->nextCouple();
         return $this->response($list);
     }
@@ -58,7 +58,8 @@ class ApiController extends BaseApiController
      *
      * @return int
      */
-    public function serverTime() {
+    public function serverTime()
+    {
         return $this->response(['time' => time()]);
     }
 

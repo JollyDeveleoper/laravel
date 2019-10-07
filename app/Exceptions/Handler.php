@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Exceptions;
+
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class Handler extends ExceptionHandler
 {
@@ -24,22 +27,25 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param Exception $exception
      * @return void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
         parent::report($exception);
     }
+
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Exception $exception
+     * @return Response
      */
     public function render($request, Exception $exception)
     {
