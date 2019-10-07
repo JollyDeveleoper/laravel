@@ -28,7 +28,6 @@ Route::group(['prefix' => 'schedule'], function () {
     Route::get('/{day}', 'ScheduleController@index');
 });
 
-
 Route::get('/', 'HomeController@welcome');
 Route::match(['GET', 'POST'], 'reposter', 'Bot\BotController@index');
 
