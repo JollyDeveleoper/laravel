@@ -13,31 +13,23 @@
             <option value="{{ url('schedule/') }}">На неделю</option>
             <option value="{{ url('schedule/today') }}">На сегодня</option>
             <option value="{{ url('schedule/tomorrow') }}">На завтра</option>
-            @foreach($data as $item => $value)
-                @foreach($value as $val)
-                    @if(7 > $val['id'])
-                        <option
-                            value="{{ url('schedule') . '#' . __('app.days.'.$val['id']) }}">{{ __('app.days.'.$val['id']) }}
-                        </option>
-                    @endif
-                @endforeach
-            @endforeach
+            @for($i = 1; $i < $count_day; $i++)
+                <option
+                    value="{{ url('schedule') . '#' . __('app.days.'.$i) }}">{{ __('app.days.'.$i) }}
+                </option>
+            @endfor
         </select>
         <br>
 
         @if($data)
             @foreach($data as $item => $values)
-                @php($isToday = date('w') === $values[0]['day'])
                 <h3 id="{{  __('app.days.'.$values[0]['day']) }}">
-                    @if($isToday)
-                        <small class="badge badge-pill badge-primary">{{ __('app.days.'.$values[0]['day']) }}</small>
-                    @else
-                        {{  __('app.days.'.$values[0]['day']) }}
-                    @endif
+                    <small {{$today !== $values[0]['day']}}class="badge badge-pill badge-primary">{{ __('app.days.'.$values[0]['day']) }}</small>
+
                 </h3>
                 @php($modalAddId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
 
-                @if(Auth::check())
+                @if($isAuth)
                     <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
                             data-target="#{{$modalAddId}}">Добавить
                     </button><br>
@@ -52,7 +44,7 @@
                             <h6 class="card-subtitle mb-2 text-muted">{{ $val['teacher'] }}</h6>
                             <p class="card-text">{{ $val['name'] . " (" . $val['cabinet'] . ")"}} </p>
 
-                        @if(Auth::check())
+                        @if($isAuth)
                             @include('schedule.template.modal_add')
                             <!-- Modal -->
                                 @include('schedule.template.modal')

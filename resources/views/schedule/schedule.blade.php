@@ -5,17 +5,17 @@
         <span class="title">Расписание</span>
 
         @foreach($data as $item => $values)
-            @php($isToday = date('w') === $values[0]['day'])
             @php($modalAddId = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 7))
 
             <h2 class="mb-2 mt-2">
                 {{__('app.days.'.$values[0]['day'])}}
-                @if($isToday)
+                @if($today === $values[0]['day'])
                     <small class="badge badge-pill badge-primary">Сегодня</small>
                 @endif
-                @if(Auth::check())
+                @if($isAuth)
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                            data-target="#{{$modalAddId}}">Добавить</button><br>
+                            data-target="#{{$modalAddId}}">Добавить
+                    </button><br>
                 @endif
             </h2>
             @foreach($values as $val)
@@ -27,7 +27,7 @@
                     <p class="card-text">{{ $val['name'] }}</p>
                     <span class="font-weight-bold">Кабинет:</span> {{ $val['cabinet'] }}
                     <br>
-                    @if(Auth::check())
+                    @if($isAuth)
                         @include('schedule.template.modal_add')
 
                     <!-- Modal -->
