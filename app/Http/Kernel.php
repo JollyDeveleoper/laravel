@@ -40,7 +40,6 @@ class Kernel extends HttpKernel
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         TrustProxies::class,
-        VerifyApiToken::class,
     ];
 
     /**
@@ -62,6 +61,8 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            VerifyApiToken::class,
+
         ],
     ];
 

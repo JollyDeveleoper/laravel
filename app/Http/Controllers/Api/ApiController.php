@@ -20,7 +20,7 @@ class ApiController extends BaseApiController
      */
     public function getAllCouples()
     {
-        $list = Schedule::getList(self::ALL_LIST);
+        $list = $this->schedule->getList(self::ALL_LIST);
         return $this->response($list);
     }
 
