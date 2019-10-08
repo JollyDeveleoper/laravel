@@ -20,7 +20,7 @@ abstract class BaseApiController
         return response()->json($args, $code);
     }
 
-    function validate(array $rules)
+    function validate(array $rules): bool
     {
         $errors = Validator::make(\request()->all(), $rules);
         if ($errors->fails()) {

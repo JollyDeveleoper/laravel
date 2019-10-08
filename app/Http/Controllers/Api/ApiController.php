@@ -55,6 +55,32 @@ class ApiController extends BaseApiController
 
 
     /**
+     * Удаление пар(ы)
+     */
+    public function deleteCouple()
+    {
+        $rules = [
+            'days' => 'required|array'
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->response(['error' => 'days is incorrect']);
+        }
+
+        $days = request()->get('days');
+
+        // Проверяем наличие дня в бд
+        foreach ($days as $day) {
+            if (!$this->schedule->find($day)) {
+                return $this->response(['error' => 'day with id = ' . $day . ' is not exist']);
+            }
+        }
+
+        // Удаляем по id
+        $this->schedule->destroy($days);
+        return $this->response(['success' => true]);
+    }
+    /**
      * Отдаем врем на сервере
      *
      * @return int
