@@ -24,14 +24,11 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     // Следующая пара
     Route::get('/nextCouple', [ApiController::class, 'getNextCouple']);
 
-    /**
-     *  Более важные действия
-     */
-
     // Время на сервере
     Route::any('/serverTime', [ApiController::class, 'serverTime']);
 
-    // Удаляем пару/пары
+
+    // Удаляем пару/пары (принимает массив значений для удаления)
     Route::delete('/couples', [ApiController::class, 'deleteCouple']);
 
     // Обновляем пару
