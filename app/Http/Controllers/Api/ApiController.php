@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\Api;
-
 
 use Illuminate\Http\JsonResponse;
 use function request;
@@ -65,6 +63,8 @@ class ApiController extends BaseApiController
 
     /**
      * Удаление пар(ы)
+     *
+     * @return JsonResponse
      */
     public function deleteCouple()
     {
@@ -90,8 +90,12 @@ class ApiController extends BaseApiController
         return $this->response(['success' => true]);
     }
 
+
     /**
      * Обновление пары
+     *
+     * @param $id
+     * @return JsonResponse
      */
     public function updateCouple($id)
     {
@@ -123,6 +127,7 @@ class ApiController extends BaseApiController
      */
     public function createCouple()
     {
+        // Не проверяем id при создании
         $rules = self::CREATE_OR_UPDATE_RULES;
         unset($rules['id']);
 
@@ -130,13 +135,14 @@ class ApiController extends BaseApiController
             return $this->response(['error' => 'Неверные данные']);
         }
 
+        // Создаем и отдаем id созданной записи
         $item = $this->schedule->create(request()->all());
         return $this->response(['success' => true, 'id' => $item['id']]);
     }
 
 
     /**
-     * Отдаем врем на сервере
+     * Отдаем время на сервере
      *
      * @return int
      */
@@ -144,6 +150,4 @@ class ApiController extends BaseApiController
     {
         return $this->response(['time' => time()]);
     }
-
-
 }
