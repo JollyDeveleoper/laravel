@@ -35,7 +35,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::delete('/couples', [ApiController::class, 'deleteCouple']);
 
     // Обновляем пару
-    Route::put('/couples/{day}', [ApiController::class, 'updateCouple']);
+    Route::put('/couples/{id}', [ApiController::class, 'updateCouple']);
 
     // Создаем пару
     Route::post('/couples', [ApiController::class, 'createCouple']);

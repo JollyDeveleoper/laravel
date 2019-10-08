@@ -80,6 +80,39 @@ class ApiController extends BaseApiController
         $this->schedule->destroy($days);
         return $this->response(['success' => true]);
     }
+
+
+    /**
+     * Обновление пары
+     */
+
+    public function updateCouple($id)
+    {
+        request()->merge(['id' => $id]);
+        $rules = [
+            'id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'day' => 'required|numeric|max:7',
+            'cabinet' => 'required',
+            'teacher' => 'required|string|max:255',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->response(['error' => 'Неверные данные']);
+        }
+
+        if (!$this->schedule->find(request()->get('id'))) {
+            return $this->response(['error' => 'Запись не найдена']);
+        }
+
+        $this->schedule->find($id)->update(request()->all());
+
+        return $this->response(['success' => true]);
+    }
+
+
     /**
      * Отдаем врем на сервере
      *
@@ -89,5 +122,6 @@ class ApiController extends BaseApiController
     {
         return $this->response(['time' => time()]);
     }
+
 
 }
