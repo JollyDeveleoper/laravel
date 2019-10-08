@@ -81,11 +81,9 @@ class ApiController extends BaseApiController
         return $this->response(['success' => true]);
     }
 
-
     /**
      * Обновление пары
      */
-
     public function updateCouple($id)
     {
         request()->merge(['id' => $id]);
