@@ -31,6 +31,7 @@ class ApiController extends BaseApiController
      */
     public function getCouple($day)
     {
+        request()->merge(['day' => $day]);
         $rules = ['day' => 'required|numeric|max:7'];
         if (!$this->validate($rules)) {
             return $this->response(['success' => false, 'message' => 'day is incorrect']);

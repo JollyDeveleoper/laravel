@@ -15,7 +15,7 @@ class VerifyApiToken
      */
     public function handle($request, Closure $next)
     {
-        if (!request()->has('access_token')) {
+        if (!request()->isMethod('get') && !request()->has('access_token')) {
             return response()->json(['success' => false, 'error_code' => 403, 'message' => 'Неверный токен'], 403);
         }
         return $next($request);

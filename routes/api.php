@@ -16,15 +16,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     // Пары на все дни
-    Route::any('/couples', [ApiController::class, 'getAllCouples']);
+    Route::get('/couples', [ApiController::class, 'getAllCouples']);
 
     // Пары на конкретный день
-    Route::any('/couples/{day}', [ApiController::class, 'getCouple']);
+    Route::get('/couples/{day}', [ApiController::class, 'getCouple']);
 
     // Следующая пара
-    Route::any('/nextCouple', [ApiController::class, 'getNextCouple']);
+    Route::get('/nextCouple', [ApiController::class, 'getNextCouple']);
+
+    /**
+     *  Более важные действия
+     */
 
     // Время на сервере
     Route::any('/serverTime', [ApiController::class, 'serverTime']);
+
+    // Удаляем пару/пары
+    Route::delete('/couples', [ApiController::class, 'deleteCouple']);
+
+    // Обновляем пару
+    Route::put('/couples/{day}', [ApiController::class, 'updateCouple']);
+
+    // Создаем пару
+    Route::post('/couples', [ApiController::class, 'createCouple']);
 
 });
