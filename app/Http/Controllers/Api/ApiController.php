@@ -10,6 +10,15 @@ use function request;
 class ApiController extends BaseApiController
 {
     const ALL_DAYS = 'all';
+    const CREATE_OR_UPDATE_RULES = [
+        'id' => 'required|integer',
+        'name' => 'required|string|max:255',
+        'day' => 'required|numeric|max:7',
+        'cabinet' => 'required',
+        'teacher' => 'required|string|max:255',
+        'start_time' => 'required|date_format:H:i',
+        'end_time' => 'required|date_format:H:i',
+    ];
 
     /**
      * Отдаем все пары на каждый день
@@ -87,27 +96,42 @@ class ApiController extends BaseApiController
     public function updateCouple($id)
     {
         request()->merge(['id' => $id]);
-        $rules = [
-            'id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'day' => 'required|numeric|max:7',
-            'cabinet' => 'required',
-            'teacher' => 'required|string|max:255',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i',
-        ];
+
+        // Валидируем данные
+        if (!$this->validate(self::CREATE_OR_UPDATE_RULES)) {
+            return $this->response(['error' => 'Неверные данные']);
+        }
+
+        $item = $this->schedule->find($id);
+
+        // Проверяем наличие записи
+        if (!$item) {
+            return $this->response(['error' => 'Запись не найдена']);
+        }
+
+        // Обновляем
+        $item->update(request()->all());
+
+        return $this->response(['success' => true]);
+    }
+
+
+    /**
+     * Создаем пару на определенный день
+     *
+     * @return JsonResponse
+     */
+    public function createCouple()
+    {
+        $rules = self::CREATE_OR_UPDATE_RULES;
+        unset($rules['id']);
 
         if (!$this->validate($rules)) {
             return $this->response(['error' => 'Неверные данные']);
         }
 
-        if (!$this->schedule->find(request()->get('id'))) {
-            return $this->response(['error' => 'Запись не найдена']);
-        }
-
-        $this->schedule->find($id)->update(request()->all());
-
-        return $this->response(['success' => true]);
+        $item = $this->schedule->create(request()->all());
+        return $this->response(['success' => true, 'id' => $item['id']]);
     }
 
 
