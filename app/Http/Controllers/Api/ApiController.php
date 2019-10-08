@@ -9,7 +9,7 @@ use function request;
 
 class ApiController extends BaseApiController
 {
-    const ALL_LIST = 'all';
+    const ALL_DAYS = 'all';
 
     /**
      * Отдаем все пары на каждый день
@@ -19,7 +19,7 @@ class ApiController extends BaseApiController
      */
     public function getAllCouples()
     {
-        $list = $this->schedule->getList(self::ALL_LIST);
+        $list = $this->schedule->getList(self::ALL_DAYS);
         return $this->response($list);
     }
 
@@ -29,7 +29,7 @@ class ApiController extends BaseApiController
      *
      * @return JsonResponse
      */
-    public function getCouple()
+    public function getCouple($day)
     {
         $rules = ['day' => 'required|numeric|max:7'];
         if (!$this->validate($rules)) {
