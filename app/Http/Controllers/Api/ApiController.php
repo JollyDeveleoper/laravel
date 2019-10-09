@@ -41,7 +41,7 @@ class ApiController extends BaseApiController
         request()->merge(['day' => $day]);
         $rules = ['day' => 'required|numeric|max:7'];
         if (!$this->validate($rules)) {
-            return $this->response(['success' => false, 'message' => 'day is incorrect']);
+            return $this->response(['success' => false, 'message' => 'day is incorrect'], self::HTTP_BAD_REQUEST);
         }
 
         $list = $this->schedule->schedule(request()->get('day'));
@@ -73,7 +73,7 @@ class ApiController extends BaseApiController
         ];
 
         if (!$this->validate($rules)) {
-            return $this->response(['error' => 'days is incorrect']);
+            return $this->response(['error' => 'days is incorrect'], self::HTTP_BAD_REQUEST);
         }
 
         $days = request()->get('days');
@@ -81,7 +81,7 @@ class ApiController extends BaseApiController
         // Проверяем наличие дня в бд
         foreach ($days as $day) {
             if (!$this->schedule->find($day)) {
-                return $this->response(['error' => 'day with id = ' . $day . ' is not exist']);
+                return $this->response(['error' => 'day with id = ' . $day . ' is not exist'], self::HTTP_NOT_FOUND);
             }
         }
 
@@ -103,14 +103,14 @@ class ApiController extends BaseApiController
 
         // Валидируем данные
         if (!$this->validate(self::CREATE_OR_UPDATE_RULES)) {
-            return $this->response(['error' => 'Неверные данные']);
+            return $this->response(['error' => 'Неверные данные'], self::HTTP_BAD_REQUEST);
         }
 
         $item = $this->schedule->find($id);
 
         // Проверяем наличие записи
         if (!$item) {
-            return $this->response(['error' => 'Запись не найдена']);
+            return $this->response(['error' => 'Запись не найдена'], self::HTTP_NOT_FOUND);
         }
 
         // Обновляем
@@ -132,12 +132,12 @@ class ApiController extends BaseApiController
         unset($rules['id']);
 
         if (!$this->validate($rules)) {
-            return $this->response(['error' => 'Неверные данные']);
+            return $this->response(['error' => 'Неверные данные'], self::HTTP_BAD_REQUEST);
         }
 
         // Создаем и отдаем id созданной записи
         $item = $this->schedule->create(request()->all());
-        return $this->response(['success' => true, 'id' => $item['id']]);
+        return $this->response(['success' => true, 'id' => $item['id']], self::HTTP_CREATED);
     }
 
 
