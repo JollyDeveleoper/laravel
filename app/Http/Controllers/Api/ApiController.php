@@ -41,7 +41,7 @@ class ApiController extends BaseApiController
         request()->merge(['day' => $day]);
         $rules = ['day' => 'required|numeric|max:7'];
         if (!$this->validate($rules)) {
-            return $this->response(['success' => false, 'message' => 'day is incorrect'], self::HTTP_BAD_REQUEST);
+            return $this->response(['error' => 'Некорректный день'], self::HTTP_BAD_REQUEST);
         }
 
         $list = $this->schedule->schedule(request()->get('day'));
@@ -73,7 +73,7 @@ class ApiController extends BaseApiController
         ];
 
         if (!$this->validate($rules)) {
-            return $this->response(['error' => 'days is incorrect'], self::HTTP_BAD_REQUEST);
+            return $this->response(['error' => 'Некорректный день'], self::HTTP_BAD_REQUEST);
         }
 
         $days = request()->get('days');
@@ -81,13 +81,13 @@ class ApiController extends BaseApiController
         // Проверяем наличие дня в бд
         foreach ($days as $day) {
             if (!$this->schedule->find($day)) {
-                return $this->response(['error' => 'day with id = ' . $day . ' is not exist'], self::HTTP_NOT_FOUND);
+                return $this->response(['error' => 'День с id = ' . $day . ' не найден'], self::HTTP_NOT_FOUND);
             }
         }
 
         // Удаляем по id
         $this->schedule->destroy($days);
-        return $this->response(['success' => true]);
+        return $this->response(['message' => 'Запись успешно удалена']);
     }
 
 
@@ -103,7 +103,7 @@ class ApiController extends BaseApiController
 
         // Валидируем данные
         if (!$this->validate(self::CREATE_OR_UPDATE_RULES)) {
-            return $this->response(['error' => 'Неверные данные'], self::HTTP_BAD_REQUEST);
+            return $this->response(['error' => 'Некорректные данные'], self::HTTP_BAD_REQUEST);
         }
 
         $item = $this->schedule->find($id);
@@ -116,7 +116,7 @@ class ApiController extends BaseApiController
         // Обновляем
         $item->update(request()->all());
 
-        return $this->response(['success' => true]);
+        return $this->response(['message' => 'Запись обновлена!']);
     }
 
 
@@ -137,7 +137,7 @@ class ApiController extends BaseApiController
 
         // Создаем и отдаем id созданной записи
         $item = $this->schedule->create(request()->all());
-        return $this->response(['success' => true, 'id' => $item['id']], self::HTTP_CREATED);
+        return $this->response(['message' => 'Новая пара успешно создана', 'id' => $item['id']], self::HTTP_CREATED);
     }
 
 
