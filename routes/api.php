@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ApiController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +13,28 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+
+Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
+    // Пары на все дни
+    Route::get('/couples', [ApiController::class, 'getAllCouples']);
+
+    // Пары на конкретный день
+    Route::get('/couples/{day}', [ApiController::class, 'getCouple']);
+
+    // Следующая пара
+    Route::get('/nextCouple', [ApiController::class, 'getNextCouple']);
+
+    // Время на сервере
+    Route::any('/serverTime', [ApiController::class, 'serverTime']);
+
+
+    // Удаляем пару/пары (принимает массив значений для удаления)
+    Route::delete('/couples', [ApiController::class, 'deleteCouple']);
+
+    // Обновляем пару
+    Route::put('/couples/{id}', [ApiController::class, 'updateCouple']);
+
+    // Создаем пару
+    Route::post('/couples', [ApiController::class, 'createCouple']);
+
+});

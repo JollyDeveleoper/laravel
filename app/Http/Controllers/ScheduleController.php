@@ -18,7 +18,7 @@ class ScheduleController extends Controller
 
     public function index($day = 'all')
     {
-        $list = Schedule::getList($day); // исходные данные
+        $list = $this->schedule->getList($day); // исходные данные
         $current_day = date('w');
         $isAuth = Auth::check();
         $count_day = count($list) + 1;
