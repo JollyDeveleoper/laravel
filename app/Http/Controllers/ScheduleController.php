@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Schedule;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
@@ -37,32 +36,28 @@ class ScheduleController extends Controller
         return $isMobile ? 'schedule/mobile/schedule' : 'schedule/schedule';
     }
 
-    public function edit(Request $request)
+    public function update()
     {
-        $data = $request->all();
-        $item = $this->schedule->find($data['id']);
+        $id = \request('id', 0);
+        $item = $this->schedule->find($id);
 
-        $item->name = $data['name'];
-        $item->teacher = $data['teacher'];
-        $item->start_time = $data['start_time'];
-        $item->end_time = $data['end_time'];
-        $item->cabinet = $data['cabinet'];
+        // Обновляем
+        $item->update(request()->all());
 
-        $item->save();
         session()->put('success', __('app.success_edit'));
         return back();
     }
 
-    public function add(Request $request)
+    public function create()
     {
-        $this->schedule->create($request->all());
+        $this->schedule->create(\request()->all());
 
         session()->put('success', __('app.success_add'));
         return back();
 
     }
 
-    public function delete(Request $request)
+    public function delete()
     {
         $deleteID = \request('deleteID');
         $this->schedule->destroy($deleteID);

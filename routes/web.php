@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth', 'prefix' => 'schedule'], function () {
 
-    Route::post('/edit', 'ScheduleController@edit')->name('edit');
-    Route::post('/add', 'ScheduleController@add')->name('add');
+    Route::post('/update', 'ScheduleController@update')->name('edit');
+    Route::post('/create', 'ScheduleController@create')->name('add');
     Route::post('/delete', 'ScheduleController@delete')->name('delete');
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
