@@ -60,6 +60,10 @@ class ScheduleController extends Controller
         $id = request('id', 0);
 
         $item = $this->schedule->find($id);
+        if ($item == null) {
+            session()->put('error', __('app.error_edit'));
+            return back();
+        }
         // Обновляем
         $item->update(request()->all());
 
