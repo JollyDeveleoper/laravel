@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="container">
-        @if(session()->has('success'))
-            <div class="alert alert-success" role="alert">
-                {{ __(session()->get('success')) }}
-                {{ session()->forget('success') }}
+        @if(session()->has('success') || session()->has('error'))
+            <div class="alert alert-{{session()->get('success') ? 'success' : 'danger'}}" role="alert">
+                {{ __(session()->get(session()->has('success') ? 'success' : 'error')) }}
+                {{ session()->forget(['success', 'error']) }}
             </div>
         @endif
         <select class="form-control" onchange="this.value !== '' ? location = this.value : ''; this.select">
